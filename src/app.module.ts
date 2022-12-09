@@ -2,11 +2,11 @@ import { ApolloDriver } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
-import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
-import { ManagerModule } from './manager/manager.module';
-import { UserModule } from './user/user.module';
-import { VetModule } from './vet/vet.module';
+import { AdminModule } from './users/admin/admin.module';
+import { ManagerModule } from './users/manager/manager.module';
+import { UserModule } from './users/user.module';
+import { VetModule } from './users/vet/vet.module';
 
 @Module({
   imports: [

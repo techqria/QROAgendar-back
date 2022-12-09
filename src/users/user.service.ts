@@ -14,5 +14,4 @@ export class UserService {
         if (!user) throw new NotFoundException('User not found. Please, check user ID');
         return user
     }
-
 }

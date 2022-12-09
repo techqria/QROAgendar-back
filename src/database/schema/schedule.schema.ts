@@ -1,12 +1,18 @@
 import { Schema } from "mongoose";
-import { IPayment } from "../dto/payment.interface";
+import { paymentMethodEnum } from "../dto/payment_method.enum";
 
 export const scheduleSchema = new Schema({
     pet_name: String,
     customer_name: String,
     customer_phone: String,
-    employee: String,
+    employee: {
+        id: String,
+        name: String,
+    },
     date: Date,
     pet_breed: String,
-    payment: IPayment,
+    payment: {
+        price: Number,
+        method: { type: String, enum: paymentMethodEnum },
+    },
 });
