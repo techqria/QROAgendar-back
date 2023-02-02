@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { IsNotEmpty } from "class-validator";
-import { EmployeeType } from "../dto/employee.type";
-import { PaymentType } from "../dto/payment.interface";
+import { EmployeeType } from "../types/employee.type";
+import { PaymentType } from "../types/payment.type";
 
 @ObjectType('Schedule')
 export class ScheduleValidator {
@@ -36,5 +36,9 @@ export class ScheduleValidator {
     @Field()
     @IsNotEmpty()
     payment: PaymentType;
+
+    @Field()
+    @IsNotEmpty()
+    pet_type: string;
 
 }

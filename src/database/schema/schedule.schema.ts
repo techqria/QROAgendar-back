@@ -3,6 +3,7 @@ import { paymentMethodEnum } from "../dto/payment_method.enum";
 
 export const scheduleSchema = new Schema({
     pet_name: String,
+    pet_type: String,
     customer_name: String,
     customer_phone: String,
     employee: {

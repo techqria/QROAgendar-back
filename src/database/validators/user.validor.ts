@@ -1,5 +1,5 @@
 import { Field, HideField, ID, ObjectType } from "@nestjs/graphql";
-import { IsEmail, IsNotEmpty, IsPhoneNumber, MinLength } from "class-validator"
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, Length, MinLength } from "class-validator"
 import { roleEnum } from "../dto/role.enum";
 
 @ObjectType('User')
@@ -16,6 +16,7 @@ export class UserValidator {
     
     @Field()
     @IsNotEmpty()
+    @IsEnum(roleEnum, {message: "Role must be manager or employee"})
     role: roleEnum;
 
     @Field()
@@ -31,5 +32,18 @@ export class UserValidator {
     @HideField()
     @IsNotEmpty()
     @MinLength(6)
-    password: string 
+    password: string ;
+
+    @Field()
+    @IsNotEmpty()
+    @Length(7,7)
+    color: string;
+
+    @Field()
+    @IsNotEmpty()
+    image_url: string;
+
+    @Field()
+    @IsOptional()
+    specialty_id?: string;
 }

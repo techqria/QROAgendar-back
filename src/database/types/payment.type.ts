@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { paymentMethodEnum } from "./payment_method.enum";
+import { paymentMethodEnum } from "../dto/payment_method.enum";
 
 @ObjectType()
 export class PaymentType {

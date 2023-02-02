@@ -1,8 +1,9 @@
-import { HttpException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import { UserValidator } from 'src/database/validators/user.validor';
 import { AuthType } from './auth.type';
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthService {
@@ -13,9 +14,11 @@ export class AuthService {
     ) { }
 
     async login(email: string, password: string): Promise<AuthType> {
-        const user = await this.userModel.findOne({ email, password });
+        const user = await this.userModel.findOne({ email});
+        const isMatch = await bcrypt.compare(password, user.password);
+        console.log(user, email, password, user.password, isMatch)
 
-        if (!user) throw new NotFoundException('User not found. Please, check your credentials');
+        if (!user || !isMatch) throw new NotFoundException('User not found. Please, check your credentials');
 
         return {
             user,
