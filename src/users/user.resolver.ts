@@ -15,4 +15,14 @@ export class UserResolver {
     ): Promise<UserValidator> {
         return await this.userService.getUserById(id);
     }
+
+    @UseGuards(GqlAuthGuard)
+    @Query(() => UserValidator)
+    async changePassword(
+        @Args('email') email: string,
+        @Args('newPassword') newPassword: string,
+        @Args('repeatNewPassword') repeatNewPassword: string,
+    ): Promise<UserValidator> {
+        return await this.userService.changePassword(email, newPassword ,repeatNewPassword);
+    }
 }
