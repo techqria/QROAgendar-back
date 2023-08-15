@@ -8,4 +8,7 @@ export class AuthType {
 
     @Field(() => String)
     token: string;
+
+    @Field(() => Boolean)
+    success: boolean;
 }

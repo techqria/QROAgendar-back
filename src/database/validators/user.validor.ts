@@ -11,12 +11,16 @@ export class UserValidator {
 
     @Field()
     @IsNotEmpty()
-    @MinLength(4)
-    name: string;
-    
+    clinic: string;
+
     @Field()
     @IsNotEmpty()
-    @IsEnum(roleEnum, {message: "Role must be manager or employee"})
+    @MinLength(4)
+    name: string;
+
+    @Field()
+    @IsNotEmpty()
+    @IsEnum(roleEnum, { message: "Role must be manager or employee" })
     role: roleEnum;
 
     @Field()
@@ -32,11 +36,11 @@ export class UserValidator {
     @HideField()
     @IsNotEmpty()
     @MinLength(6)
-    password: string ;
+    password: string;
 
     @Field()
     @IsNotEmpty()
-    @Length(7,7)
+    @Length(7, 7)
     color: string;
 
     @Field()
