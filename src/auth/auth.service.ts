@@ -1,10 +1,10 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
-import { UserValidator } from 'src/database/validators/user.validor';
 import { AuthType } from './auth.type';
 import * as bcrypt from "bcrypt";
 import { TokenType } from "./token.type";
+import { UserValidator } from "src/database/validators/user.validor";
 
 @Injectable()
 export class AuthService {

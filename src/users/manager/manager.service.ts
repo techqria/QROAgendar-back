@@ -1,11 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { UserValidator } from 'src/database/validators/user.validor';
-import { SpecialtyValidator } from 'src/database/validators/specialty.validator';
-import { ScheduleValidator } from 'src/database/validators/schedule.validator';
-import { VetInput } from 'src/database/inputs/vet.input';
-import { SpecialtyInput } from 'src/database/inputs/specialty.input';
-import { ScheduleInput } from 'src/database/inputs/schedule.input';
+import { ScheduleInput } from "src/database/inputs/schedule.input";
+import { SpecialtyInput } from "src/database/inputs/specialty.input";
+import { VetUpdateInput } from "src/database/inputs/vet-update.input";
+import { VetInput } from "src/database/inputs/vet.input";
+import { ScheduleValidator } from "src/database/validators/schedule.validator";
+import { SpecialtyValidator } from "src/database/validators/specialty.validator";
+import { UserValidator } from "src/database/validators/user.validor";
 
 @Injectable()
 export class ManagerService {
@@ -24,7 +25,7 @@ export class ManagerService {
         return await this.specialtyModel.find();
     }
     async getAllVets(): Promise<UserValidator[]> {
-        return await this.userModel.find({role: "employee"});
+        return await this.userModel.find({ role: "employee" });
     }
     async getAllSchedules(): Promise<ScheduleValidator[]> {
         return await this.scheduleModel.find();
@@ -34,6 +35,33 @@ export class ManagerService {
         const newVet = await this.userModel.create(vet)
         newVet.save();
         return newVet;
+    }
+
+    async getVetById(id: string): Promise<UserValidator> {
+        return await this.userModel.findById(id)
+    }
+
+    async updateVetById(newData: VetUpdateInput): Promise<UserValidator> {
+        return await this.userModel.findByIdAndUpdate(newData.id,
+            {
+                $set: {
+                    name: newData.name,
+                    color: newData.color,
+                    email: newData.email,
+                    phone: newData.phone,
+                    specialty_id: newData.specialty_id
+                }
+            },
+            { new: true }
+        )
+    }
+
+    async removeVetById(id: string): Promise<UserValidator> {
+        return await this.userModel.findByIdAndDelete(id)
+    }
+
+    async removeSpecialtyById(id: string): Promise<SpecialtyValidator> {
+        return await this.specialtyModel.findByIdAndDelete(id)
     }
 
     async createSpecialty(specialty: SpecialtyInput): Promise<SpecialtyValidator> {
@@ -47,5 +75,5 @@ export class ManagerService {
         newSchedule.save();
         return newSchedule;
     }
-    
+
 }

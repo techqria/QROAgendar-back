@@ -1,5 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { roleEnum } from "src/database/dto/role.enum";
+import { roleEnum } from "../dto/role.enum";
 
 @InputType()
 export class ManagerInput {

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { UserValidator } from 'src/database/validators/user.validor';
 import { ManagerInput } from '../../database/inputs/manager.input';
+import { UserValidator } from "src/database/validators/user.validor";
 
 @Injectable()
 export class AdminService {

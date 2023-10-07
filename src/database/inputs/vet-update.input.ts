@@ -2,7 +2,10 @@ import { Field, InputType } from "@nestjs/graphql";
 import { roleEnum } from "../dto/role.enum";
 
 @InputType()
-export class UserInput {
+export class VetUpdateInput {
+    @Field()
+    id: string;
+
     @Field()
     name: string;
 
@@ -10,10 +13,7 @@ export class UserInput {
     email: string;
 
     @Field()
-    password: string;
-
-    @Field()
-    role: roleEnum;
+    role: roleEnum = roleEnum.employee;
 
     @Field()
     phone: string;
@@ -22,8 +22,6 @@ export class UserInput {
     color: string;
 
     @Field()
-    image_url: string;
-
-    @Field()
     specialty_id?: string;
+
 }

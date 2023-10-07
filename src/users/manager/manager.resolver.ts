@@ -1,13 +1,15 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ManagerService } from './manager.service';
-import { GqlAuthGuard } from 'src/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
-import { UserValidator } from 'src/database/validators/user.validor';
-import { SpecialtyValidator } from 'src/database/validators/specialty.validator';
-import { ScheduleValidator } from 'src/database/validators/schedule.validator';
-import { VetInput } from 'src/database/inputs/vet.input';
-import { SpecialtyInput } from 'src/database/inputs/specialty.input';
-import { ScheduleInput } from 'src/database/inputs/schedule.input';
+import { GqlAuthGuard } from "src/guards/auth.guard";
+import { UserValidator } from "src/database/validators/user.validor";
+import { VetInput } from "src/database/inputs/vet.input";
+import { VetUpdateValidator } from "src/database/validators/vet-update.validator";
+import { VetUpdateInput } from "src/database/inputs/vet-update.input";
+import { SpecialtyInput } from "src/database/inputs/specialty.input";
+import { SpecialtyValidator } from "src/database/validators/specialty.validator";
+import { ScheduleValidator } from "src/database/validators/schedule.validator";
+import { ScheduleInput } from "src/database/inputs/schedule.input";
 
 @Resolver()
 export class ManagerResolver {
@@ -21,6 +23,31 @@ export class ManagerResolver {
         @Args('vet') vet: VetInput,
     ): Promise<UserValidator> {
         return await this.managerService.createVet(vet);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => UserValidator)
+    async updateVet(
+        @Args('vet') vet: VetUpdateInput,
+    ): Promise<VetUpdateValidator> {
+        return await this.managerService.updateVetById(vet);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => UserValidator)
+    async removeVet(
+        @Args('id') id: string,
+    ): Promise<UserValidator> {
+        return await this.managerService.removeVetById(id);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => SpecialtyValidator)
+    async removeSpecialty(
+        @Args('id') id: string,
+    ): Promise<SpecialtyValidator> {
+        console.log(id)
+        return await this.managerService.removeSpecialtyById(id);
     }
 
     @UseGuards(GqlAuthGuard)
@@ -48,6 +75,7 @@ export class ManagerResolver {
     async createSchedule(
         @Args('schedule') schedule: ScheduleInput,
     ): Promise<ScheduleValidator> {
+        console.log(schedule)
         return await this.managerService.createSchedule(schedule);
     }
 

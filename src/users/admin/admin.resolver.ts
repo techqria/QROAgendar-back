@@ -1,9 +1,9 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { GqlAuthGuard } from 'src/guards/auth.guard';
-import { UserValidator } from 'src/database/validators/user.validor';
 import { AdminService } from './admin.service';
 import { ManagerInput } from '../../database/inputs/manager.input';
+import { UserValidator } from "src/database/validators/user.validor";
+import { GqlAuthGuard } from "src/guards/auth.guard";
 
 @Resolver()
 export class AdminResolver {

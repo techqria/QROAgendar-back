@@ -23,7 +23,11 @@ export class ScheduleValidator {
 
     @Field()
     @IsNotEmpty()
-    employee: EmployeeType;
+    employee_id: string;
+
+    @Field()
+    @IsNotEmpty()
+    specialty_id: string;
 
     @Field()
     @IsNotEmpty()

@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { ScheduleValidator } from 'src/database/validators/schedule.validator';
+import { ScheduleValidator } from "src/database/validators/schedule.validator";
 
 @Injectable()
 export class VetService {

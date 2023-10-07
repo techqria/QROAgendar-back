@@ -4,7 +4,4 @@ import { Field, InputType } from "@nestjs/graphql";
 export class SpecialtyInput {
     @Field()
     title: string;
-
-    @Field()
-    qtt_employees: number;
 }

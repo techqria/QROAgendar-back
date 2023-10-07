@@ -1,8 +1,8 @@
 import { Args, Query, Resolver } from "@nestjs/graphql";
-import { UserValidator } from "src/database/validators/user.validor";
 import { AuthService } from "./auth.service";
 import { AuthType } from "./auth.type";
 import { TokenType } from "./token.type";
+import { UserValidator } from "src/database/validators/user.validor";
 import { TokenValidator } from "src/database/validators/token.validator";
 
 @Resolver(of => UserValidator)

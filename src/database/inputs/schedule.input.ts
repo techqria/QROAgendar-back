@@ -14,7 +14,10 @@ export class ScheduleInput {
     customer_phone: string;
 
     @Field()
-    employee: EmployeeInput;
+    employee_id: string;
+
+    @Field()
+    specialty_id: string
 
     @Field()
     date: Date;
