@@ -7,6 +7,11 @@ import { GqlAuthGuard } from "src/guards/auth.guard";
 import { FinanceListValidator } from "src/database/validators/finance-list.validator";
 import { ManagerService } from "../manager/manager.service";
 import { FinanceListByUserValidator } from "src/database/validators/finance-list-by-user.validator";
+import { paymentMethodEnum } from "src/database/dto/payment_method.enum";
+import { getAnnualRevenue } from "src/functions/get-annual-revenue";
+import { getPaymentMethodsPercentage } from "src/functions/get-payment-methods-percentage";
+import { getWeekScheduleHours } from "src/functions/get-week-schedule-hours";
+import { DashboardValidator } from "src/database/validators/dashboard.validator";
 
 @Resolver()
 export class AdminResolver {
@@ -72,5 +77,21 @@ export class AdminResolver {
 
         return financeList;
     }
-}
 
+    @UseGuards(GqlAuthGuard)
+    @Query(() => DashboardValidator)
+    async getDashboard(): Promise<DashboardValidator> {
+
+        const schedules = await this.managerService.getAllSchedules()
+
+        const paymentMethodsPercentage = getPaymentMethodsPercentage(schedules)
+        const annualRevenue = getAnnualRevenue(schedules)
+        const weekScheduleHours = getWeekScheduleHours(schedules)
+
+        return {
+            paymentMethodsPercentage,
+            annualRevenue,
+            weekScheduleHours,
+        };
+    }
+}
