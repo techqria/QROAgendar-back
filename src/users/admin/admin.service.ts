@@ -2,12 +2,16 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { ManagerInput } from '../../database/inputs/manager.input';
 import { UserValidator } from "src/database/validators/user.validor";
+import { ScheduleValidator } from "src/database/validators/schedule.validator";
 
 @Injectable()
 export class AdminService {
     constructor(
         @Inject('USER_MODEL')
-        private userModel: Model<UserValidator>
+        private userModel: Model<UserValidator>,
+
+        @Inject('SCHEDULE_MODEL')
+        private scheduleModel: Model<ScheduleValidator>
     ) { }
 
     async getAllUsers(): Promise<UserValidator[]> {
@@ -22,5 +26,9 @@ export class AdminService {
         const newManager = await this.userModel.create(manager)
         newManager.save();
         return newManager;
+    }
+
+    async getScheduleByVetId(vetId: string): Promise<ScheduleValidator[]> {
+        return await this.scheduleModel.find({ employee_id: vetId });
     }
 }
