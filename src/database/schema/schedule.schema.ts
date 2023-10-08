@@ -6,10 +6,8 @@ export const scheduleSchema = new Schema({
     pet_type: String,
     customer_name: String,
     customer_phone: String,
-    employee: {
-        id: String,
-        name: String,
-    },
+    employee_id: String,
+    specialty_id: String,
     date: Date,
     pet_breed: String,
     payment: {

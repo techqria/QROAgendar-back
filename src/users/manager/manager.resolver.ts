@@ -10,6 +10,7 @@ import { SpecialtyInput } from "src/database/inputs/specialty.input";
 import { SpecialtyValidator } from "src/database/validators/specialty.validator";
 import { ScheduleValidator } from "src/database/validators/schedule.validator";
 import { ScheduleInput } from "src/database/inputs/schedule.input";
+import { ScheduleCalendarValidator } from "src/database/validators/schedule-calendar.validator";
 
 @Resolver()
 export class ManagerResolver {
@@ -84,4 +85,37 @@ export class ManagerResolver {
     async getSchedules(): Promise<ScheduleValidator[]> {
         return await this.managerService.getAllSchedules();
     }
+
+    @UseGuards(GqlAuthGuard)
+    @Query(() => [ScheduleCalendarValidator])
+    async getSchedulesCalendar(): Promise<ScheduleCalendarValidator[]> {
+
+        const schedules = await this.managerService.getAllSchedules()
+
+        const schedulePromises: Promise<ScheduleCalendarValidator>[] = schedules.map(async schedule => {
+            console.log( '\n 96',await this.managerService.getVetById(schedule.employee_id))
+            const { name, color } = await this.managerService.getVetById(schedule.employee_id)
+            const { title } = await this.managerService.getSpecialtyById(schedule.specialty_id)
+
+            return {
+                specialty_name: title,
+                pet_name: schedule.pet_name,
+                customer_name: schedule.customer_name,
+                customer_phone: schedule.customer_phone,
+                employee_id: schedule.employee_id,
+                specialty_id: schedule.specialty_id,
+                date: schedule.date,
+                pet_breed: schedule.pet_breed,
+                payment: schedule.payment,
+                pet_type: schedule.pet_type,
+                employee_name: name,
+                employee_color: color
+            }
+        })
+
+        const scheduleCalendar: ScheduleCalendarValidator[] = await Promise.all(schedulePromises);
+        
+        return scheduleCalendar;
+    }
+
 }

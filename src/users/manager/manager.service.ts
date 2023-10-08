@@ -41,6 +41,10 @@ export class ManagerService {
         return await this.userModel.findById(id)
     }
 
+    async getSpecialtyById(id: string): Promise<SpecialtyValidator> {
+        return await this.specialtyModel.findById(id)
+    }
+
     async updateVetById(newData: VetUpdateInput): Promise<UserValidator> {
         return await this.userModel.findByIdAndUpdate(newData.id,
             {
