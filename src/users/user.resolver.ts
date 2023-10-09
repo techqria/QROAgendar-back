@@ -1,8 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { UserValidator } from "src/database/validators/user.validor";
-import { GqlAuthGuard } from "src/guards/auth.guard";
+import { UserValidator } from "../database/validators/user.validor";
+import { GqlAuthGuard } from "../guards/auth.guard";
 
 @Resolver(of => UserValidator)
 export class UserResolver {

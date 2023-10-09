@@ -1,4 +1,4 @@
-import { ScheduleValidator } from "src/database/validators/schedule.validator"
+import { ScheduleValidator } from "../database/validators/schedule.validator"
 
 export function getAnnualRevenue(schedules: ScheduleValidator[]) {
     const monthlyRevenue = {

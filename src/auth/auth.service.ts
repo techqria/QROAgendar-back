@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { AuthType } from './auth.type';
 import * as bcrypt from "bcrypt";
 import { TokenType } from "./token.type";
-import { UserValidator } from "src/database/validators/user.validor";
+import { UserValidator } from "../database/validators/user.validor";
 
 @Injectable()
 export class AuthService {

@@ -1,16 +1,16 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ManagerService } from './manager.service';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from "src/guards/auth.guard";
-import { UserValidator } from "src/database/validators/user.validor";
-import { VetInput } from "src/database/inputs/vet.input";
-import { VetUpdateValidator } from "src/database/validators/vet-update.validator";
-import { VetUpdateInput } from "src/database/inputs/vet-update.input";
-import { SpecialtyInput } from "src/database/inputs/specialty.input";
-import { SpecialtyValidator } from "src/database/validators/specialty.validator";
-import { ScheduleValidator } from "src/database/validators/schedule.validator";
-import { ScheduleInput } from "src/database/inputs/schedule.input";
-import { ScheduleCalendarValidator } from "src/database/validators/schedule-calendar.validator";
+import { GqlAuthGuard } from "../../guards/auth.guard";
+import { UserValidator } from "../../database/validators/user.validor";
+import { VetInput } from "../../database/inputs/vet.input";
+import { VetUpdateValidator } from "../../database/validators/vet-update.validator";
+import { VetUpdateInput } from "../../database/inputs/vet-update.input";
+import { SpecialtyInput } from "../../database/inputs/specialty.input";
+import { SpecialtyValidator } from "../../database/validators/specialty.validator";
+import { ScheduleValidator } from "../../database/validators/schedule.validator";
+import { ScheduleInput } from "../../database/inputs/schedule.input";
+import { ScheduleCalendarValidator } from "../../database/validators/schedule-calendar.validator";
 
 @Resolver()
 export class ManagerResolver {

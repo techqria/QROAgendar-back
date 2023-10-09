@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { UserValidator } from "src/database/validators/user.validor";
+import { UserValidator } from "../database/validators/user.validor";
 
 @Injectable()
 export class UserService {

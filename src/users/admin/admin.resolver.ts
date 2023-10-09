@@ -2,16 +2,16 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AdminService } from './admin.service';
 import { ManagerInput } from '../../database/inputs/manager.input';
-import { UserValidator } from "src/database/validators/user.validor";
-import { GqlAuthGuard } from "src/guards/auth.guard";
-import { FinanceListValidator } from "src/database/validators/finance-list.validator";
+import { UserValidator } from "../../database/validators/user.validor";
+import { GqlAuthGuard } from "../../guards/auth.guard";
+import { FinanceListValidator } from "../../database/validators/finance-list.validator";
 import { ManagerService } from "../manager/manager.service";
-import { FinanceListByUserValidator } from "src/database/validators/finance-list-by-user.validator";
-import { paymentMethodEnum } from "src/database/dto/payment_method.enum";
-import { getAnnualRevenue } from "src/functions/get-annual-revenue";
-import { getPaymentMethodsPercentage } from "src/functions/get-payment-methods-percentage";
-import { getWeekScheduleHours } from "src/functions/get-week-schedule-hours";
-import { DashboardValidator } from "src/database/validators/dashboard.validator";
+import { FinanceListByUserValidator } from "../../database/validators/finance-list-by-user.validator";
+import { paymentMethodEnum } from "../../database/dto/payment_method.enum";
+import { getAnnualRevenue } from "../../functions/get-annual-revenue";
+import { getPaymentMethodsPercentage } from "../../functions/get-payment-methods-percentage";
+import { getWeekScheduleHours } from "../../functions/get-week-schedule-hours";
+import { DashboardValidator } from "../../database/validators/dashboard.validator";
 
 @Resolver()
 export class AdminResolver {

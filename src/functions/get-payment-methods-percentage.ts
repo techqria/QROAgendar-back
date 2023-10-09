@@ -1,5 +1,5 @@
-import { paymentMethodEnum } from "src/database/dto/payment_method.enum"
-import { ScheduleValidator } from "src/database/validators/schedule.validator"
+import { paymentMethodEnum } from "../database/dto/payment_method.enum"
+import { ScheduleValidator } from "../database/validators/schedule.validator"
 
 export function getPaymentMethodsPercentage(schedules: ScheduleValidator[]) {
     const paymentMethodsCount = schedules.reduce((acc, curr) => {

@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { ScheduleInput } from "src/database/inputs/schedule.input";
-import { SpecialtyInput } from "src/database/inputs/specialty.input";
-import { VetUpdateInput } from "src/database/inputs/vet-update.input";
-import { VetInput } from "src/database/inputs/vet.input";
-import { ScheduleValidator } from "src/database/validators/schedule.validator";
-import { SpecialtyValidator } from "src/database/validators/specialty.validator";
-import { UserValidator } from "src/database/validators/user.validor";
+import { ScheduleInput } from "../../database/inputs/schedule.input";
+import { SpecialtyInput } from "../../database/inputs/specialty.input";
+import { VetUpdateInput } from "../../database/inputs/vet-update.input";
+import { VetInput } from "../../database/inputs/vet.input";
+import { ScheduleValidator } from "../../database/validators/schedule.validator";
+import { SpecialtyValidator } from "../../database/validators/specialty.validator";
+import { UserValidator } from "../../database/validators/user.validor";
 
 @Injectable()
 export class ManagerService {
