@@ -7,6 +7,7 @@ import { AdminModule } from './users/admin/admin.module';
 import { ManagerModule } from './users/manager/manager.module';
 import { UserModule } from './users/user.module';
 import { VetModule } from './users/vet/vet.module';
+import { AppController } from "./app.controller";
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { VetModule } from './users/vet/vet.module';
       autoSchemaFile: true,
       context: ({ req }) => ({ req })
     }),
-  ]
+  ],
+  controllers: [AppController]
 })
 export class AppModule { }
