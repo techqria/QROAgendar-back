@@ -14,7 +14,7 @@ import { UserService } from "src/users/user.service";
         PassportModule,
         JwtModule.registerAsync({
             useFactory: () => ({
-                secret: process.env.JWT_SECRET,
+                secret: process.env.NEXT_PUBLIC_JWT_SECRET,
                 signOptions: {
                     expiresIn: '30d'
                 }
