@@ -36,4 +36,12 @@ export function getWeekScheduleHours(schedules: ScheduleValidator[]) {
         fourth: { hour: reversedArray[3] == undefined ? '0' : reversedArray[3][0], qtt_schedules: reversedArray[3] == undefined ? 0 : reversedArray[3][1] },
         fifth: { hour: reversedArray[4] == undefined ? '0' : reversedArray[4][0], qtt_schedules: reversedArray[4] == undefined ? 0 : reversedArray[4][1] },
     };
+
+    return {
+        first: { hour: reversedArray[0][0] ?? '0', qtt_schedules: reversedArray[0][1] ?? 0 },
+        second: { hour: reversedArray[1][0] ?? '0', qtt_schedules: reversedArray[1][1] ?? 0 },
+        third: { hour: reversedArray[2][0] ?? '0', qtt_schedules: reversedArray[2][1] ?? 0 },
+        fourth: { hour: reversedArray[3][0] ?? '0', qtt_schedules: reversedArray[3][1] ?? 0 },
+        fifth: { hour: reversedArray[4][0] ?? '0', qtt_schedules: reversedArray[4][1] ?? 0 },
+    };
 }

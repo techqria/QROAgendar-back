@@ -47,7 +47,6 @@ export class ManagerResolver {
     async removeSpecialty(
         @Args('id') id: string,
     ): Promise<SpecialtyValidator> {
-        console.log(id)
         return await this.managerService.removeSpecialtyById(id);
     }
 
@@ -76,7 +75,6 @@ export class ManagerResolver {
     async createSchedule(
         @Args('schedule') schedule: ScheduleInput,
     ): Promise<ScheduleValidator> {
-        console.log(schedule)
         return await this.managerService.createSchedule(schedule);
     }
 
@@ -93,7 +91,6 @@ export class ManagerResolver {
         const schedules = await this.managerService.getAllSchedules()
 
         const schedulePromises: Promise<ScheduleCalendarValidator>[] = schedules.map(async schedule => {
-            console.log( '\n 96',await this.managerService.getVetById(schedule.employee_id))
             const { name, color } = await this.managerService.getVetById(schedule.employee_id)
             const { title } = await this.managerService.getSpecialtyById(schedule.specialty_id)
 

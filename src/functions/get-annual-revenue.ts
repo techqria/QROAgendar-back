@@ -63,9 +63,8 @@ export function getAnnualRevenue(schedules: ScheduleValidator[]) {
 
             return acc
         }
+        return acc
     }, monthlyRevenue)
-
-    console.log(annualRevenue)
 
     return annualRevenue
 }
