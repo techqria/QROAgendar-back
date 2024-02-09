@@ -11,6 +11,7 @@ import { SpecialtyValidator } from "../../database/validators/specialty.validato
 import { ScheduleValidator } from "../../database/validators/schedule.validator";
 import { ScheduleInput } from "../../database/inputs/schedule.input";
 import { ScheduleCalendarValidator } from "../../database/validators/schedule-calendar.validator";
+import { CustomerInput } from "src/database/inputs/customer.input";
 
 @Resolver()
 export class ManagerResolver {
@@ -113,6 +114,14 @@ export class ManagerResolver {
         const scheduleCalendar: ScheduleCalendarValidator[] = await Promise.all(schedulePromises);
         
         return scheduleCalendar;
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => UserValidator)
+    async createCustomer(
+        @Args('customer') customer: CustomerInput,
+    ): Promise<UserValidator> {
+        return await this.managerService.createCustomer(customer);
     }
 
 }

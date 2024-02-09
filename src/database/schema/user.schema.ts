@@ -8,7 +8,12 @@ export const userSchema = new Schema({
     phone: String,
     email: String,
     password: String,
-    color: String,
+    color: {
+        type: String,
+        required: function () {
+            return this.role !== roleEnum.customer ? true : false
+        }
+    },
     image_url: String,
     specialty_id: {
         type: String,

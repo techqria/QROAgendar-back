@@ -7,6 +7,7 @@ import { VetInput } from "../../database/inputs/vet.input";
 import { ScheduleValidator } from "../../database/validators/schedule.validator";
 import { SpecialtyValidator } from "../../database/validators/specialty.validator";
 import { UserValidator } from "../../database/validators/user.validor";
+import { CustomerInput } from "src/database/inputs/customer.input";
 
 @Injectable()
 export class ManagerService {
@@ -35,6 +36,12 @@ export class ManagerService {
         const newVet = await this.userModel.create(vet)
         newVet.save();
         return newVet;
+    }
+
+    async createCustomer(customer: CustomerInput): Promise<UserValidator> {
+        const newCustomer = await this.userModel.create(customer)
+        newCustomer.save();
+        return newCustomer;
     }
 
     async getVetById(id: string): Promise<UserValidator> {

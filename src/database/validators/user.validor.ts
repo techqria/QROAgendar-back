@@ -41,7 +41,7 @@ export class UserValidator {
     @Field()
     @IsNotEmpty()
     @Length(7, 7)
-    color: string;
+    color?: string;
 
     @Field()
     @IsNotEmpty()
