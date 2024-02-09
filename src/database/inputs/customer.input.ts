@@ -19,12 +19,5 @@ export class CustomerInput {
     phone: string;
 
     @Field()
-    color?: string;
-    
-    @Field()
     image_url: string;
-    
-    @Field()
-    specialty_id?: string;
-
 }
