@@ -5,9 +5,10 @@ import { DatabaseModule } from "../../database/database.module";
 import { userProvider } from "../../database/providers/user.provider";
 import { specialtyProvider } from "../../database/providers/specialty.provider";
 import { scheduleProvider } from "../../database/providers/schedule.provider";
+import { animalTypeProvider } from "src/database/providers/animal_type.provider";
 
 @Module({
     imports: [DatabaseModule],
-    providers: [...userProvider, ...specialtyProvider, ...scheduleProvider, ManagerResolver, ManagerService]
+    providers: [...userProvider, ...specialtyProvider,...animalTypeProvider, ...scheduleProvider, ManagerResolver, ManagerService]
 })
 export class ManagerModule { }

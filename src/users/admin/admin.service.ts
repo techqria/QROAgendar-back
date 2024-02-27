@@ -22,7 +22,7 @@ export class AdminService {
         return await this.userModel.findByIdAndDelete(id);
     }
 
-    async createManager(manager: ManagerInput): Promise<UserValidator> {
+    async createManager(manager: ManagerInput): Promise<any> {
         const newManager = await this.userModel.create(manager)
         newManager.save();
         return newManager;

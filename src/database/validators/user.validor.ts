@@ -39,7 +39,7 @@ export class UserValidator {
     password: string;
 
     @Field()
-    @IsNotEmpty()
+    @IsOptional()
     @Length(7, 7)
     color?: string;
 
