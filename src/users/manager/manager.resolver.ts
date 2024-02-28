@@ -135,21 +135,21 @@ export class ManagerResolver {
     }
 
     @UseGuards(GqlAuthGuard)
-    @Query(() => UserValidator)
+    @Query(() => AnimalValidator)
     async getAnimalById(
-        @Args('id') id: string,
+        @Args('userId') userId: string,
         @Args('animalIndex') animalIndex: number
     ): Promise<AnimalValidator> {
-        return await this.managerService.getAnimalById(id, animalIndex)
+        return await this.managerService.getAnimalById(userId, animalIndex)
     }
 
     @UseGuards(GqlAuthGuard)
     @Mutation(() => UserValidator)
     async removeAnimal(
-        @Args('id') id: string,
+        @Args('userId') userId: string,
         @Args('animalIndex') animalIndex: number
     ): Promise<UserValidator> {
-        return await this.managerService.removeAnimal(id, animalIndex)
+        return await this.managerService.removeAnimal(userId, animalIndex)
     }
 
     @UseGuards(GqlAuthGuard)
@@ -164,10 +164,10 @@ export class ManagerResolver {
     @Mutation(() => UserValidator)
     async updateAnimal(
         @Args('animal') animal: AnimalInput,
-        @Args('id') id: string,
+        @Args('userId') userId: string,
         @Args('animalIndex') animalIndex: number
     ): Promise<UserValidator> {
-        return await this.managerService.updateAnimalById(id, animal, animalIndex);
+        return await this.managerService.updateAnimalById(userId, animal, animalIndex);
     }
 
 
@@ -189,13 +189,13 @@ export class ManagerResolver {
     }
 
     @UseGuards(GqlAuthGuard)
-    @Query(() => AnimalTypeValidator)
+    @Query(() => [AnimalTypeValidator])
     async getAllAnimalTypes(): Promise<AnimalTypeValidator[]> {
         return await this.managerService.getAllAnimalTypes()
     }
 
     @UseGuards(GqlAuthGuard)
-    @Query(() => UserValidator)
+    @Query(() => AnimalTypeValidator)
     async getAnimalTypeById(
         @Args('id') id: string,
     ): Promise<AnimalTypeValidator> {

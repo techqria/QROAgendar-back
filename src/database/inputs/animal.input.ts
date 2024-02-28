@@ -4,7 +4,7 @@ import { GenderEnum } from "../dto/gender.enum";
 @InputType()
 export class AnimalInput {
     @Field()
-    id:string
+    userId:string
 
     @Field()
     name:string
@@ -24,6 +24,6 @@ export class AnimalInput {
     @Field()
     neutered:boolean
 
-    @Field()
+    @Field({nullable: true})
     avatar:string
 }

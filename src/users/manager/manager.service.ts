@@ -111,13 +111,13 @@ export class ManagerService {
     }
 
     async createAnimal(animal: AnimalInput): Promise<UserValidator> {
-        return await this.userModel.findByIdAndUpdate({ id: animal.id }, {
+        return await this.userModel.findByIdAndUpdate(animal.userId, {
             $push: {
                 animals: {
                     name: animal.name,
                     gender: animal.gender,
                     breed: animal.breed,
-                    color: animal,
+                    color: animal.color,
                     typeAnimalId: animal.typeAnimalId,
                     neutered: animal.neutered,
                     avatar: animal.avatar,
@@ -131,40 +131,29 @@ export class ManagerService {
     }
 
     async getAnimalById(userId: string, animalIndex: number): Promise<AnimalValidator> {
-        return (await this.userModel.findOne({ id: userId })).animals[animalIndex]
+        return (await this.userModel.findById(userId)).animals[animalIndex]
     }
 
     async removeAnimal(userId: string, animalIndex: number): Promise<UserValidator> {
-         await this.userModel.findByIdAndUpdate(
-            { id: userId },
-            { $unset: { [`animals.${animalIndex}`]: 1 } }
-        );
-        return await this.userModel.findByIdAndUpdate(
-            { id: userId },
-            { $pull: { animals: null } }
-        );
+        const user = await this.userModel.findById(userId,);
+        const userUpdated = user
+        userUpdated.animals.splice(animalIndex, 1)
+
+        return this.userModel.findByIdAndUpdate(userId, {
+            $set: {
+                animals: userUpdated.animals
+            }
+        })
     }
 
     async updateAnimalById(userId: string, newAnimal: AnimalInput, animalIndex: number): Promise<UserValidator> {
-        await this.userModel.findByIdAndUpdate(
-            { id: userId },
-            { $unset: { [`animals.${animalIndex}`]: 1 } }
-        );
-        await this.userModel.findByIdAndUpdate(
-            { id: userId },
-            { $pull: { animals: null } }
-        );
-        return this.userModel.findByIdAndUpdate({id:userId},{
-            $push: {
-                animals: {
-                    name: newAnimal.name,
-                    gender: newAnimal.gender,
-                    breed: newAnimal.breed,
-                    color: newAnimal,
-                    typeAnimalId: newAnimal.typeAnimalId,
-                    neutered: newAnimal.neutered,
-                    avatar: newAnimal.avatar,
-                }
+        const user = await this.userModel.findById(userId,);
+        const userUpdated = user
+        userUpdated.animals[animalIndex] = newAnimal
+
+        return this.userModel.findByIdAndUpdate(userId, {
+            $set: {
+                animals: userUpdated.animals
             }
         })
     }
