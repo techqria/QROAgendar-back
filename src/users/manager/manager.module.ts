@@ -5,7 +5,7 @@ import { DatabaseModule } from "../../database/database.module";
 import { userProvider } from "../../database/providers/user.provider";
 import { specialtyProvider } from "../../database/providers/specialty.provider";
 import { scheduleProvider } from "../../database/providers/schedule.provider";
-import { animalTypeProvider } from "src/database/providers/animal_type.provider";
+import { animalTypeProvider } from "../../database/providers/animal_type.provider";
 
 @Module({
     imports: [DatabaseModule],

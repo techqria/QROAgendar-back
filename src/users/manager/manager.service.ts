@@ -7,12 +7,12 @@ import { VetInput } from "../../database/inputs/vet.input";
 import { ScheduleValidator } from "../../database/validators/schedule.validator";
 import { SpecialtyValidator } from "../../database/validators/specialty.validator";
 import { UserValidator } from "../../database/validators/user.validor";
-import { CustomerInput } from "src/database/inputs/customer.input";
-import { roleEnum } from "src/database/dto/role.enum";
-import { AnimalTypeValidator } from "src/database/validators/animal-type.validator";
-import { AnimalTypeInput } from "src/database/inputs/animal_type.input";
-import { AnimalInput } from "src/database/inputs/animal.input";
-import { AnimalValidator } from "src/database/validators/animal.validator";
+import { CustomerInput } from "../../database/inputs/customer.input";
+import { roleEnum } from "../../database/dto/role.enum";
+import { AnimalTypeValidator } from "../../database/validators/animal-type.validator";
+import { AnimalTypeInput } from "../../database/inputs/animal_type.input";
+import { AnimalInput } from "../../database/inputs/animal.input";
+import { AnimalValidator } from "../../database/validators/animal.validator";
 
 @Injectable()
 export class ManagerService {

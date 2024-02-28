@@ -11,11 +11,11 @@ import { SpecialtyValidator } from "../../database/validators/specialty.validato
 import { ScheduleValidator } from "../../database/validators/schedule.validator";
 import { ScheduleInput } from "../../database/inputs/schedule.input";
 import { ScheduleCalendarValidator } from "../../database/validators/schedule-calendar.validator";
-import { CustomerInput } from "src/database/inputs/customer.input";
-import { AnimalInput } from "src/database/inputs/animal.input";
-import { AnimalTypeValidator } from "src/database/validators/animal-type.validator";
-import { AnimalTypeInput } from "src/database/inputs/animal_type.input";
-import { AnimalValidator } from "src/database/validators/animal.validator";
+import { CustomerInput } from "../../database/inputs/customer.input";
+import { AnimalInput } from "../../database/inputs/animal.input";
+import { AnimalTypeValidator } from "../../database/validators/animal-type.validator";
+import { AnimalTypeInput } from "../../database/inputs/animal_type.input";
+import { AnimalValidator } from "../../database/validators/animal.validator";
 
 @Resolver()
 export class ManagerResolver {
