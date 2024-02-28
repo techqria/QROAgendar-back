@@ -11,6 +11,8 @@ import { CustomerInput } from "src/database/inputs/customer.input";
 import { roleEnum } from "src/database/dto/role.enum";
 import { AnimalTypeValidator } from "src/database/validators/animal-type.validator";
 import { AnimalTypeInput } from "src/database/inputs/animal_type.input";
+import { AnimalInput } from "src/database/inputs/animal.input";
+import { AnimalValidator } from "src/database/validators/animal.validator";
 
 @Injectable()
 export class ManagerService {
@@ -24,7 +26,7 @@ export class ManagerService {
         @Inject('SCHEDULE_MODEL')
         private scheduleModel: Model<ScheduleValidator>,
 
-        
+
         @Inject('ANIMAL_TYPE_MODEL')
         private animalTypeModel: Model<AnimalTypeValidator>,
     ) { }
@@ -52,18 +54,18 @@ export class ManagerService {
     }
 
     async getAllCustomers(): Promise<UserValidator[]> {
-        return await this.userModel.find({role: roleEnum.customer})
+        return await this.userModel.find({ role: roleEnum.customer })
     }
 
-    async getCustomerById(id:string): Promise<UserValidator> {
+    async getCustomerById(id: string): Promise<UserValidator> {
         return await this.userModel.findById(id)
     }
 
-    async removeCustomer(id:string):Promise<UserValidator> {
+    async removeCustomer(id: string): Promise<UserValidator> {
         return await this.userModel.findByIdAndDelete(id)
     }
 
-    async updateCustomerById(newCustomer: CustomerInput): Promise<UserValidator>{
+    async updateCustomerById(newCustomer: CustomerInput): Promise<UserValidator> {
         return await this.userModel.findByIdAndUpdate(newCustomer.id,
             {
                 $set: {
@@ -72,7 +74,7 @@ export class ManagerService {
                     phone: newCustomer.phone,
                     birhdate: newCustomer.birhdate,
                     animals: newCustomer.animals,
-                    adress:newCustomer.adress
+                    adress: newCustomer.adress
                 }
             },
             { new: true }
@@ -89,15 +91,15 @@ export class ManagerService {
         return await this.animalTypeModel.find()
     }
 
-    async getAnimalTypeById(id:string): Promise<AnimalTypeValidator> {
+    async getAnimalTypeById(id: string): Promise<AnimalTypeValidator> {
         return await this.animalTypeModel.findById(id)
     }
 
-    async removeAnimalType(id:string):Promise<AnimalTypeValidator> {
+    async removeAnimalType(id: string): Promise<AnimalTypeValidator> {
         return await this.animalTypeModel.findByIdAndDelete(id)
     }
 
-    async updateAnimalTypeById(newAnimalType: AnimalTypeInput): Promise<AnimalTypeValidator>{
+    async updateAnimalTypeById(newAnimalType: AnimalTypeInput): Promise<AnimalTypeValidator> {
         return await this.animalTypeModel.findByIdAndUpdate(newAnimalType.id,
             {
                 $set: {
@@ -106,6 +108,65 @@ export class ManagerService {
             },
             { new: true }
         )
+    }
+
+    async createAnimal(animal: AnimalInput): Promise<AnimalValidator> {
+        return await this.userModel.findByIdAndUpdate({ id: animal.id }, {
+            $push: {
+                animals: {
+                    name: animal.name,
+                    gender: animal.gender,
+                    breed: animal.breed,
+                    color: animal,
+                    typeAnimalId: animal.typeAnimalId,
+                    neutered: animal.neutered,
+                    avatar: animal.avatar,
+                }
+            }
+        })
+    }
+
+    async getAllAnimals(): Promise<AnimalValidator[][]> {
+        return (await this.userModel.find()).map(el => el.animals)
+    }
+
+    async getAnimalById(userId: string, animalIndex: number): Promise<AnimalValidator> {
+        return await this.userModel.findOne({ id: userId }, `animals.${animalIndex}`)
+    }
+
+    async removeAnimal(userId: string, animalIndex: number): Promise<AnimalValidator> {
+         await this.userModel.findByIdAndUpdate(
+            { id: userId },
+            { $unset: { [`animals.${animalIndex}`]: 1 } }
+        );
+        return await this.userModel.findByIdAndUpdate(
+            { id: userId },
+            { $pull: { animals: null } }
+        );
+    }
+
+    async updateAnimalById(userId: string, newAnimal: AnimalInput, animalIndex: string): Promise<AnimalValidator> {
+        await this.userModel.findByIdAndUpdate(
+            { id: userId },
+            { $unset: { [`animals.${animalIndex}`]: 1 } }
+        );
+        await this.userModel.findByIdAndUpdate(
+            { id: userId },
+            { $pull: { animals: null } }
+        );
+        return this.userModel.findByIdAndUpdate({id:userId},{
+            $push: {
+                animals: {
+                    name: newAnimal.name,
+                    gender: newAnimal.gender,
+                    breed: newAnimal.breed,
+                    color: newAnimal,
+                    typeAnimalId: newAnimal.typeAnimalId,
+                    neutered: newAnimal.neutered,
+                    avatar: newAnimal.avatar,
+                }
+            }
+        })
     }
 
     async getVetById(id: string): Promise<UserValidator> {

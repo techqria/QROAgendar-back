@@ -4,6 +4,9 @@ import { GenderEnum } from "../dto/gender.enum";
 @InputType()
 export class AnimalInput {
     @Field()
+    id:string
+
+    @Field()
     name:string
     
     @Field()
