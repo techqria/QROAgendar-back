@@ -110,7 +110,7 @@ export class ManagerService {
         )
     }
 
-    async createAnimal(animal: AnimalInput): Promise<AnimalValidator> {
+    async createAnimal(animal: AnimalInput): Promise<UserValidator> {
         return await this.userModel.findByIdAndUpdate({ id: animal.id }, {
             $push: {
                 animals: {
@@ -131,10 +131,10 @@ export class ManagerService {
     }
 
     async getAnimalById(userId: string, animalIndex: number): Promise<AnimalValidator> {
-        return await this.userModel.findOne({ id: userId }, `animals.${animalIndex}`)
+        return (await this.userModel.findOne({ id: userId })).animals[animalIndex]
     }
 
-    async removeAnimal(userId: string, animalIndex: number): Promise<AnimalValidator> {
+    async removeAnimal(userId: string, animalIndex: number): Promise<UserValidator> {
          await this.userModel.findByIdAndUpdate(
             { id: userId },
             { $unset: { [`animals.${animalIndex}`]: 1 } }
@@ -145,7 +145,7 @@ export class ManagerService {
         );
     }
 
-    async updateAnimalById(userId: string, newAnimal: AnimalInput, animalIndex: string): Promise<AnimalValidator> {
+    async updateAnimalById(userId: string, newAnimal: AnimalInput, animalIndex: number): Promise<UserValidator> {
         await this.userModel.findByIdAndUpdate(
             { id: userId },
             { $unset: { [`animals.${animalIndex}`]: 1 } }
