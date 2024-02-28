@@ -1,4 +1,5 @@
 import { Field, ObjectType } from "@nestjs/graphql";
+import { GenderEnum } from "../dto/gender.enum";
 
 @ObjectType()
 export class AnimalType {
@@ -6,7 +7,7 @@ export class AnimalType {
     name:string
     
     @Field()
-    gender: "female" | "male"
+    gender: GenderEnum
     
     @Field()
     breed:string

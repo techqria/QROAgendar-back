@@ -1,12 +1,12 @@
 import { Schema } from "mongoose";
 import { roleEnum } from "../dto/role.enum";
 import * as bcrypt from "bcrypt";
-import { AdressType } from "../types/adress.type";
-import { AnimalType } from "../types/animal.type";
+import { AdressSchema } from "./adress.schema";
+import { AnimalSchema } from "./animal.schema";
 
 export const userSchema = new Schema({
     name: String,
-    role: roleEnum,
+    role: String,
     phone: String,
     email: String,
     password: String,
@@ -24,7 +24,7 @@ export const userSchema = new Schema({
         }
     },
     adress: {
-        type: AdressType,
+        type: AdressSchema,
         required: function () {
             return this.role == roleEnum.customer ? true : false
         }
@@ -36,7 +36,7 @@ export const userSchema = new Schema({
         }
     },
     animals: {
-        type: [AnimalType],
+        type: [AnimalSchema],
         required: function () {
             return this.role == roleEnum.customer ? true : false
         }

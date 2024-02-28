@@ -1,20 +1,20 @@
 import { Field, ObjectType } from "@nestjs/graphql"
 
-@ObjectType()
+@ObjectType('Adress')
 export class AdressType {
 
     @Field()
-    cep: string
+    cep: String
 
     @Field()
-    city: string
+    city: String
 
     @Field()
-    state: string
+    state: String
 
     @Field()
-    neighborhood: string
+    neighborhood: String
 
     @Field()
-    additionalInfo: string
+    additionalInfo: String
 }

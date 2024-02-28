@@ -26,12 +26,12 @@ export class CustomerInput {
     @Field()
     image_url?: string;
 
-    @Field()
-    adress: AdressInput
+    @Field() 
+    adress: AdressInput;
 
     @Field()
-    birhdate:Date
+    birhdate?:Date
 
-    @Field()
-    animals: AnimalInput[]
+    @Field(type => [AnimalInput])
+    animals?: AnimalInput[]
 }

@@ -3,6 +3,8 @@ import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, Length, MinLeng
 import { roleEnum } from "../dto/role.enum";
 import { AdressInput } from "../inputs/adress.input";
 import { AnimalInput } from "../inputs/animal.input";
+import { AnimalType } from "../types/animal.type";
+import { AdressType } from "../types/adress.type";
 
 @ObjectType('User')
 export class UserValidator {
@@ -53,12 +55,12 @@ export class UserValidator {
     @IsOptional()
     specialty_id?: string;
 
-    @Field()
-    adress?: AdressInput
+    @Field(type => AdressType)
+    adress?: AdressType
 
     @Field()
     birhdate?: Date
 
-    @Field()
-    animals?: AnimalInput[]
+    @Field(type => [AnimalType])
+    animals?: AnimalType[]
 }
