@@ -1,8 +1,13 @@
 import { Field, InputType } from "@nestjs/graphql";
 import { roleEnum } from "../dto/role.enum";
+import { AdressInput } from "./adress.input";
+import { AnimalInput } from "./animal.input";
 
 @InputType()
 export class CustomerInput {
+    @Field()
+    id: string;
+    
     @Field()
     name: string;
 
@@ -19,5 +24,14 @@ export class CustomerInput {
     phone: string;
 
     @Field()
-    image_url: string;
+    image_url?: string;
+
+    @Field()
+    adress: AdressInput
+
+    @Field()
+    birhdate:Date
+
+    @Field()
+    animals: AnimalInput[]
 }

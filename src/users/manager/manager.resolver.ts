@@ -12,6 +12,7 @@ import { ScheduleValidator } from "../../database/validators/schedule.validator"
 import { ScheduleInput } from "../../database/inputs/schedule.input";
 import { ScheduleCalendarValidator } from "../../database/validators/schedule-calendar.validator";
 import { CustomerInput } from "src/database/inputs/customer.input";
+import { AnimalInput } from "src/database/inputs/animal.input";
 
 @Resolver()
 export class ManagerResolver {
@@ -123,5 +124,15 @@ export class ManagerResolver {
     ): Promise<UserValidator> {
         return await this.managerService.createCustomer(customer);
     }
+    
+    // @UseGuards(GqlAuthGuard)
+    // @Mutation(() => UserValidator)
+    // async createAnimal(
+    //     @Args('animal') animal: AnimalInput,
+    // ): Promise<UserValidator> {
+    //     return await this.managerService.createAnimal(animal);
+    // }
+
+
 
 }

@@ -1,0 +1,7 @@
+{
+  "name": "back",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}

@@ -1,6 +1,8 @@
 import { Field, HideField, ID, ObjectType } from "@nestjs/graphql";
 import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, Length, MinLength } from "class-validator"
 import { roleEnum } from "../dto/role.enum";
+import { AdressInput } from "../inputs/adress.input";
+import { AnimalInput } from "../inputs/animal.input";
 
 @ObjectType('User')
 export class UserValidator {
@@ -50,4 +52,13 @@ export class UserValidator {
     @Field()
     @IsOptional()
     specialty_id?: string;
+
+    @Field()
+    adress?: AdressInput
+
+    @Field()
+    birhdate?: Date
+
+    @Field()
+    animals?: AnimalInput[]
 }
