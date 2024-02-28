@@ -24,7 +24,7 @@ export class CustomerInput {
     @Field()
     phone: string;
 
-    @Field()
+    @Field({nullable: true})
     image_url?: string;
 
     @Field() 
