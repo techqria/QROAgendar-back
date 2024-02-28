@@ -72,7 +72,7 @@ export class ManagerService {
                     name: newCustomer.name,
                     email: newCustomer.email,
                     phone: newCustomer.phone,
-                    birhdate: newCustomer.birhdate,
+                    birthdate: newCustomer.birthdate,
                     animals: newCustomer.animals,
                     adress: newCustomer.adress
                 }

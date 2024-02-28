@@ -29,7 +29,7 @@ export const userSchema = new Schema({
             return this.role == roleEnum.customer ? true : false
         }
     },
-    birhdate: {
+    birthdate: {
         type: Date,
         required: function () {
             return this.role == roleEnum.customer ? true : false

@@ -210,4 +210,11 @@ export class ManagerResolver {
         return await this.managerService.removeAnimalType(id);
     }
 
+    @UseGuards(GqlAuthGuard)
+    @Query(() => [UserValidator])
+    async getAllCustomers(): Promise<UserValidator[]> {
+        return await this.managerService.getAllCustomers();
+    }
+
+
 }

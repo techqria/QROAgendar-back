@@ -2,11 +2,12 @@ import { Field, InputType } from "@nestjs/graphql";
 import { roleEnum } from "../dto/role.enum";
 import { AdressInput } from "./adress.input";
 import { AnimalInput } from "./animal.input";
+import { IsOptional } from "class-validator";
 
 @InputType()
 export class CustomerInput {
-    @Field()
-    id: string;
+    @Field({nullable: true})
+    id?: string;
     
     @Field()
     name: string;
@@ -30,7 +31,7 @@ export class CustomerInput {
     adress: AdressInput;
 
     @Field()
-    birhdate?:Date
+    birthdate?:Date
 
     @Field(type => [AnimalInput])
     animals?: AnimalInput[]

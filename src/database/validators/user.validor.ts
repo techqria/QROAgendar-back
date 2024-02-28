@@ -59,7 +59,7 @@ export class UserValidator {
     adress?: AdressType
 
     @Field()
-    birhdate?: Date
+    birthdate?: Date
 
     @Field(type => [AnimalType])
     animals?: AnimalType[]
