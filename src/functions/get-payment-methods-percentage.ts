@@ -21,10 +21,10 @@ export function getPaymentMethodsPercentage(schedules: ScheduleValidator[]) {
     const totalSchedules = schedules.length;
 
     const paymentMethodsPercentage = {
-        debit: (paymentMethodsCount.debit / totalSchedules) * 100,
-        credit: (paymentMethodsCount.credit / totalSchedules) * 100,
-        money: (paymentMethodsCount.money / totalSchedules) * 100,
-        pix: (paymentMethodsCount.pix / totalSchedules) * 100,
+        debit: Math.round((paymentMethodsCount.debit / totalSchedules) * 100),
+        credit: Math.round((paymentMethodsCount.credit / totalSchedules) * 100),
+        money: Math.round((paymentMethodsCount.money / totalSchedules) * 100),
+        pix: Math.round((paymentMethodsCount.pix / totalSchedules) * 100),
     }
 
     return paymentMethodsPercentage
