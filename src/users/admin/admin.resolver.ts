@@ -65,9 +65,7 @@ export class AdminResolver {
 
     @UseGuards(GqlAuthGuard)
     @Query(() => [FinanceListByUserValidator])
-    async getFinanceListByUser(
-        @Args('id') id: string
-    ): Promise<FinanceListByUserValidator[]> {
+    async getFinanceListByUser(@Args('id') id: string): Promise<FinanceListByUserValidator[]> {
 
         const schedules = await this.adminService.getScheduleByVetId(id)
 

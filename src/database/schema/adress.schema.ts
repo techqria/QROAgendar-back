@@ -6,4 +6,4 @@ export const AdressSchema = new Schema({
     state: String,
     neighborhood: String,
     additionalInfo: String,
-})
+},{ timestamps: true })

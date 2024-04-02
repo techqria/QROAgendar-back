@@ -7,4 +7,4 @@ export const dashboardHistoricSchema = new Schema({
         profit: Number,
         date: Date
     }]
-})
+},{ timestamps: true })

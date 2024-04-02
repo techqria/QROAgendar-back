@@ -14,4 +14,4 @@ export const scheduleSchema = new Schema({
         price: Number,
         method: { type: String, enum: paymentMethodEnum },
     },
-});
+},{ timestamps: true });

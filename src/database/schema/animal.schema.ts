@@ -8,4 +8,4 @@ export const AnimalSchema = new Schema({
     typeAnimalId: String,
     neutered: Boolean,
     avatar: String,
-})
+},{ timestamps: true })

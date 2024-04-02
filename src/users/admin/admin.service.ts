@@ -29,6 +29,6 @@ export class AdminService {
     }
 
     async getScheduleByVetId(vetId: string): Promise<ScheduleValidator[]> {
-        return await this.scheduleModel.find({ employee_id: vetId });
+        return await this.scheduleModel.find({ employee_id: vetId }).sort({ date: -1 });
     }
 }
