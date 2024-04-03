@@ -6,6 +6,9 @@ import { PaymentType } from "../types/payment.type";
 @ObjectType()
 export class ScheduleCalendarValidator {
     @Field()
+    id?: string;
+
+    @Field()
     @IsNotEmpty()
     employee_name: string;
 

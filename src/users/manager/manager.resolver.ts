@@ -95,11 +95,12 @@ export class ManagerResolver {
 
         const schedules = await this.managerService.getAllSchedules()
 
-        const schedulePromises: Promise<ScheduleCalendarValidator>[] = schedules.map(async schedule => {
+        const scheduleCalendar: ScheduleCalendarValidator[] = await Promise.all(schedules.map(async schedule => {
             const { name, color } = await this.managerService.getVetById(schedule.employee_id)
             const { title } = await this.managerService.getSpecialtyById(schedule.specialty_id)
 
             return {
+                id: schedule.id,
                 specialty_name: title,
                 pet_name: schedule.pet_name,
                 customer_name: schedule.customer_name,
@@ -113,9 +114,7 @@ export class ManagerResolver {
                 employee_name: name,
                 employee_color: color
             }
-        })
-
-        const scheduleCalendar: ScheduleCalendarValidator[] = await Promise.all(schedulePromises);
+        }))
 
         return scheduleCalendar;
     }
