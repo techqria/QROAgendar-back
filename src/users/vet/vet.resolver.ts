@@ -15,4 +15,12 @@ export class VetResolver {
     ): Promise<ScheduleValidator[]> {
         return await this.vetService.getMySchedules(id);
     }
+
+    @UseGuards(GqlAuthGuard)
+    @Query(() => ScheduleValidator)
+    async getScheduleById(
+        @Args('id') id: string
+    ): Promise<ScheduleValidator> {
+        return await this.vetService.getScheduleById(id);
+    }
 }

@@ -14,4 +14,8 @@ export class VetService {
         if (!schedules) throw new NotFoundException('No appointment found.');
         return schedules;
     }
+
+    async getScheduleById(id: string): Promise<ScheduleValidator> {
+        return await this.scheduleModel.findById(id)
+    }
 }
