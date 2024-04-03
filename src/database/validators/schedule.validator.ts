@@ -45,4 +45,6 @@ export class ScheduleValidator {
     @IsNotEmpty()
     pet_type: string;
 
+    @Field()
+    text: string;
 }

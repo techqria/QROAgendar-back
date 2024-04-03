@@ -4,6 +4,6 @@ import { Controller, Get } from '@nestjs/common';
 export class AppController {
     @Get('')
     async hello() {
-        return 'QRO AGENDAR API'
+        return '<h1>QRO AGENDAR API</h1>'
     }
 }

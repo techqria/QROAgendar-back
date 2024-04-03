@@ -30,4 +30,7 @@ export class ScheduleInput {
 
     @Field()
     pet_type: string;
+
+    @Field()
+    text?: string;
 }
