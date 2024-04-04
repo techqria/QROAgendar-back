@@ -8,9 +8,10 @@ import { ManagerResolver } from "../manager/manager.resolver";
 import { scheduleProvider } from "../../database/providers/schedule.provider";
 import { specialtyProvider } from "../../database/providers/specialty.provider";
 import { animalTypeProvider } from "../../database/providers/animal_type.provider";
+import { VetService } from "../vet/vet.service";
 
 @Module({
     imports: [DatabaseModule],
-    providers: [...userProvider, ...scheduleProvider,...specialtyProvider,...animalTypeProvider, AdminResolver, AdminService, ManagerResolver, ManagerService]
+    providers: [...userProvider, ...scheduleProvider,...specialtyProvider,...animalTypeProvider, AdminResolver, AdminService, ManagerResolver, ManagerService, VetService]
 })
 export class AdminModule { }

@@ -26,7 +26,6 @@ export class ManagerService {
         @Inject('SCHEDULE_MODEL')
         private scheduleModel: Model<ScheduleValidator>,
 
-
         @Inject('ANIMAL_TYPE_MODEL')
         private animalTypeModel: Model<AnimalTypeValidator>,
     ) { }
@@ -91,9 +90,6 @@ export class ManagerService {
         return await this.animalTypeModel.find()
     }
 
-    async getAnimalTypeById(id: string): Promise<AnimalTypeValidator> {
-        return await this.animalTypeModel.findById(id)
-    }
 
     async removeAnimalType(id: string): Promise<AnimalTypeValidator> {
         return await this.animalTypeModel.findByIdAndDelete(id)
@@ -162,9 +158,6 @@ export class ManagerService {
         return await this.userModel.findById(id)
     }
 
-    async getSpecialtyById(id: string): Promise<SpecialtyValidator> {
-        return await this.specialtyModel.findById(id)
-    }
 
     async updateVetById(newData: VetUpdateInput): Promise<UserValidator> {
         return await this.userModel.findByIdAndUpdate(newData.id,

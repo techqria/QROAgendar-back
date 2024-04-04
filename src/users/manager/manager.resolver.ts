@@ -16,11 +16,13 @@ import { AnimalInput } from "../../database/inputs/animal.input";
 import { AnimalTypeValidator } from "../../database/validators/animal-type.validator";
 import { AnimalTypeInput } from "../../database/inputs/animal_type.input";
 import { AnimalValidator } from "../../database/validators/animal.validator";
+import { VetService } from "../vet/vet.service";
 
 @Resolver()
 export class ManagerResolver {
     constructor(
-        private managerService: ManagerService
+        private managerService: ManagerService,
+        private vetService: VetService
     ) { }
 
     @UseGuards(GqlAuthGuard)
@@ -97,7 +99,7 @@ export class ManagerResolver {
 
         const scheduleCalendar: ScheduleCalendarValidator[] = await Promise.all(schedules.map(async schedule => {
             const { name, color } = await this.managerService.getVetById(schedule.employee_id)
-            const { title } = await this.managerService.getSpecialtyById(schedule.specialty_id)
+            const { title } = await this.vetService.getSpecialtyById(schedule.specialty_id)
 
             return {
                 id: schedule.id,
@@ -131,15 +133,6 @@ export class ManagerResolver {
     @Query(() => UserValidator)
     async getAllAnimals(): Promise<AnimalValidator[][]> {
         return await this.managerService.getAllAnimals()
-    }
-
-    @UseGuards(GqlAuthGuard)
-    @Query(() => AnimalValidator)
-    async getAnimalById(
-        @Args('userId') userId: string,
-        @Args('animalIndex') animalIndex: number
-    ): Promise<AnimalValidator> {
-        return await this.managerService.getAnimalById(userId, animalIndex)
     }
 
     @UseGuards(GqlAuthGuard)
@@ -191,14 +184,6 @@ export class ManagerResolver {
     @Query(() => [AnimalTypeValidator])
     async getAllAnimalTypes(): Promise<AnimalTypeValidator[]> {
         return await this.managerService.getAllAnimalTypes()
-    }
-
-    @UseGuards(GqlAuthGuard)
-    @Query(() => AnimalTypeValidator)
-    async getAnimalTypeById(
-        @Args('id') id: string,
-    ): Promise<AnimalTypeValidator> {
-        return await this.managerService.getAnimalTypeById(id)
     }
 
     @UseGuards(GqlAuthGuard)
