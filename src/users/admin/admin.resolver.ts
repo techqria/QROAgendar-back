@@ -12,12 +12,14 @@ import { getAnnualRevenue } from "../../functions/get-annual-revenue";
 import { getPaymentMethodsPercentage } from "../../functions/get-payment-methods-percentage";
 import { getWeekScheduleHours } from "../../functions/get-week-schedule-hours";
 import { DashboardValidator } from "../../database/validators/dashboard.validator";
+import { VetService } from "../vet/vet.service";
 
 @Resolver()
 export class AdminResolver {
     constructor(
         private adminService: AdminService,
         private managerService: ManagerService,
+        private vetService: VetService,
     ) { }
 
     @UseGuards(GqlAuthGuard)
@@ -69,9 +71,17 @@ export class AdminResolver {
 
         const schedules = await this.adminService.getScheduleByVetId(id)
 
-        const financeList: FinanceListByUserValidator[] = schedules.map(
-            ({ customer_name, date, payment }) => ({ customer_name, date, payment })
-        )
+        const financeList: FinanceListByUserValidator[] = await Promise.all(schedules.map(
+            async ({ customer_name, date, payment, pet_breed, pet_name, pet_type }) => (
+                {
+                    customer_name,
+                    date, payment,
+                    pet_name,
+                    pet_breed,
+                    pet_type: (await this.vetService.getAnimalTypeById(pet_type)).name
+                }
+            )
+        ))
 
         return financeList;
     }

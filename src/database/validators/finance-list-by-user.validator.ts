@@ -15,4 +15,16 @@ export class FinanceListByUserValidator {
     @Field()
     @IsNotEmpty()
     payment: PaymentType;
+
+    @Field()
+    @IsNotEmpty()
+    pet_name: string;
+
+    @Field()
+    @IsNotEmpty()
+    pet_type: string;
+    
+    @Field()
+    @IsNotEmpty()
+    pet_breed: string;
 }
