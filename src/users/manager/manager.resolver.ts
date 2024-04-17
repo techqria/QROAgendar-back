@@ -82,6 +82,11 @@ export class ManagerResolver {
     async createSchedule(
         @Args('schedule') schedule: ScheduleInput,
     ): Promise<ScheduleValidator> {
+
+        const hasScheduleHour = await this.managerService.verifyScheduleHour(schedule.date, schedule.employee_id, schedule.specialty_id)
+
+        if(hasScheduleHour) throw new Error("Este funcionário já possui um agendamento nesse horário")
+        
         return await this.managerService.createSchedule(schedule);
     }
 

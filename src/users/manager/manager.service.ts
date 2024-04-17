@@ -194,4 +194,14 @@ export class ManagerService {
         return newSchedule;
     }
 
+    async verifyScheduleHour(date: Date, employee_id: string, specialty_id: string): Promise<number> {
+        return (await this.scheduleModel.find({
+            date: {
+                $gte: new Date(date.getTime() - 30 * 60000), // 30 minutes before
+                $lte: new Date(date.getTime() + 30 * 60000), // 30 minutes after
+            },
+            employee_id,
+            specialty_id
+        })).length
+    }
 }
