@@ -17,7 +17,6 @@ export class AuthService {
     async login(email: string, password: string): Promise<AuthType> {
         const user = await this.userModel.findOne({ email });
         const isMatch = await bcrypt.compare(password, user.password);
-        console.log(user, email, password, user.password, isMatch)
 
         if (!user || !isMatch) throw new NotFoundException('User not found. Please, check your credentials');
 

@@ -3,6 +3,7 @@ import { Args, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { UserValidator } from "../database/validators/user.validor";
 import { GqlAuthGuard } from "../guards/auth.guard";
+import { ChangePasswordValidator } from "src/database/validators/change-password.validator";
 
 @Resolver(of => UserValidator)
 export class UserResolver {
@@ -17,12 +18,12 @@ export class UserResolver {
     }
 
     @UseGuards(GqlAuthGuard)
-    @Query(() => UserValidator)
+    @Query(() => ChangePasswordValidator)
     async changePassword(
         @Args('email') email: string,
         @Args('newPassword') newPassword: string,
         @Args('repeatNewPassword') repeatNewPassword: string,
-    ): Promise<UserValidator> {
+    ): Promise<ChangePasswordValidator> {
         return await this.userService.changePassword(email, newPassword ,repeatNewPassword);
     }
 }
