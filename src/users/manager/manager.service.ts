@@ -43,7 +43,27 @@ export class ManagerService {
     async createVet(vet: VetInput): Promise<UserValidator> {
         const newVet = await this.userModel.create(vet)
         newVet.save();
+
+        // atualizar quantidade de funcionários
+        await this.increaseSpecialtyQttEmployees(newVet.specialty_id)
+
         return newVet;
+    }
+
+    private async increaseSpecialtyQttEmployees(specialty_id: string) {
+        await this.specialtyModel.findByIdAndUpdate(specialty_id, {
+            $inc: {
+                qtt_employees: 1
+            }
+        })
+    }
+
+    private async decreaseSpecialtyQttEmployees(specialty_id: string) {
+        await this.specialtyModel.findByIdAndUpdate(specialty_id, {
+            $inc: {
+                qtt_employees: -1
+            }
+        })
     }
 
     async createCustomer(customer: CustomerInput): Promise<UserValidator> {
@@ -175,7 +195,9 @@ export class ManagerService {
     }
 
     async removeVetById(id: string): Promise<UserValidator> {
-        return await this.userModel.findByIdAndDelete(id)
+        const vetRemoved = await this.userModel.findByIdAndDelete(id)
+        await this.decreaseSpecialtyQttEmployees(vetRemoved.specialty_id)
+        return vetRemoved
     }
 
     async removeSpecialtyById(id: string): Promise<SpecialtyValidator> {
