@@ -7,7 +7,6 @@ import { GqlAuthGuard } from "../../guards/auth.guard";
 import { FinanceListValidator } from "../../database/validators/finance-list.validator";
 import { ManagerService } from "../manager/manager.service";
 import { FinanceListByUserValidator } from "../../database/validators/finance-list-by-user.validator";
-import { paymentMethodEnum } from "../../database/dto/payment_method.enum";
 import { getAnnualRevenue } from "../../functions/get-annual-revenue";
 import { getPaymentMethodsPercentage } from "../../functions/get-payment-methods-percentage";
 import { getWeekScheduleHours } from "../../functions/get-week-schedule-hours";
