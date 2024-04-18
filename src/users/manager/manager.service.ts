@@ -40,6 +40,15 @@ export class ManagerService {
         return await this.scheduleModel.find();
     }
 
+    async getSchedulesByDateRange(startDate:Date, finalDate:Date): Promise<ScheduleValidator[]> {
+        return await this.scheduleModel.find({
+            date: {
+                $gte: new Date(startDate).getTime(),
+                $lte: new Date(finalDate).getTime()
+            }
+        });
+    }
+
     async createVet(vet: VetInput): Promise<UserValidator> {
         const newVet = await this.userModel.create(vet)
         newVet.save();

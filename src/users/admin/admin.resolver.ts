@@ -12,6 +12,8 @@ import { getPaymentMethodsPercentage } from "../../functions/get-payment-methods
 import { getWeekScheduleHours } from "../../functions/get-week-schedule-hours";
 import { DashboardValidator } from "../../database/validators/dashboard.validator";
 import { VetService } from "../vet/vet.service";
+import { DashboardFinanceValidator } from "src/database/validators/dashboard-finance.validator";
+import { getPaymentMethodsValue } from "src/functions/get-payment-methods-value";
 
 @Resolver()
 export class AdminResolver {
@@ -100,5 +102,20 @@ export class AdminResolver {
             annualRevenue,
             weekScheduleHours,
         };
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Query(() => DashboardFinanceValidator)
+    async getDashboardFinance(
+        @Args('startDate') startDate: Date,
+        @Args('finalDate') finalDate: Date
+    ): Promise<DashboardFinanceValidator> {
+        const schedules = await this.managerService.getSchedulesByDateRange(startDate, finalDate)
+
+        const paymentMethods = getPaymentMethodsValue(schedules)
+
+        return {
+            paymentMethods,
+        }
     }
 }
