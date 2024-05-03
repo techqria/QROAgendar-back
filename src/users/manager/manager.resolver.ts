@@ -227,4 +227,13 @@ export class ManagerResolver {
     ): Promise<UserValidator> {
         return await this.managerService.updateAnimalByIndex(index, animal);
     }
+    
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => UserValidator)
+    async removeAnimalByIndex(
+        @Args('index') index: number,
+        @Args('userId') userId: string,
+    ): Promise<UserValidator> {
+        return await this.managerService.removeAnimalByIndex(index, userId);
+    }
 }

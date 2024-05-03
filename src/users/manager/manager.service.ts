@@ -255,22 +255,32 @@ export class ManagerService {
     }
 
     async updateAnimalByIndex(index: number, animal: AnimalInput): Promise<UserValidator> {
-        console.log(index, animal)
         return await this.userModel.findByIdAndUpdate(animal.userId,
             {
                 $set: {
-                  [`animals.${index}.avatar`]: animal.avatar, 
-                  [`animals.${index}.breed`]: animal.breed, 
-                  [`animals.${index}.color`]: animal.color, 
-                  [`animals.${index}.gender`]: animal.gender, 
-                  [`animals.${index}.name`]: animal.name, 
-                  [`animals.${index}.neutered`]: animal.neutered, 
-                  [`animals.${index}.typeAnimalId`]: animal.typeAnimalId, 
+                    [`animals.${index}.avatar`]: animal.avatar,
+                    [`animals.${index}.breed`]: animal.breed,
+                    [`animals.${index}.color`]: animal.color,
+                    [`animals.${index}.gender`]: animal.gender,
+                    [`animals.${index}.name`]: animal.name,
+                    [`animals.${index}.neutered`]: animal.neutered,
+                    [`animals.${index}.typeAnimalId`]: animal.typeAnimalId,
                 },
             },
             {
-              new: true, 
+                new: true,
             }
         )
+    }
+
+    async removeAnimalByIndex(index: number, userId: string): Promise<UserValidator> {
+        await this.userModel.findByIdAndUpdate(userId,
+            { $unset: { [`animals.${index}`]: "" } },
+        )
+
+        return await this.userModel.findByIdAndUpdate(userId,
+            { $pull: { animals: null } }, // Remove elements with value 'null'
+            { new: true } // Return the updated document (optional)
+        );
     }
 }
