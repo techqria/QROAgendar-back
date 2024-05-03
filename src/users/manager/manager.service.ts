@@ -13,6 +13,7 @@ import { AnimalTypeValidator } from "../../database/validators/animal-type.valid
 import { AnimalTypeInput } from "../../database/inputs/animal_type.input";
 import { AnimalInput } from "../../database/inputs/animal.input";
 import { AnimalValidator } from "../../database/validators/animal.validator";
+import { CustomerUpdateInput } from "src/database/inputs/customer-update.input";
 
 @Injectable()
 export class ManagerService {
@@ -40,7 +41,7 @@ export class ManagerService {
         return await this.scheduleModel.find();
     }
 
-    async getSchedulesByDateRange(startDate:Date, finalDate:Date): Promise<ScheduleValidator[]> {
+    async getSchedulesByDateRange(startDate: Date, finalDate: Date): Promise<ScheduleValidator[]> {
         return await this.scheduleModel.find({
             date: {
                 $gte: new Date(startDate).getTime(),
@@ -197,6 +198,23 @@ export class ManagerService {
                     email: newData.email,
                     phone: newData.phone,
                     specialty_id: newData.specialty_id
+                }
+            },
+            { new: true }
+        )
+    }
+
+    async updateCustomerProfileById(id: string, customer: CustomerUpdateInput): Promise<UserValidator> {
+        return await this.userModel.findByIdAndUpdate(id,
+            {
+                $set: {
+                    name: customer.name,
+                    email: customer.email,
+                    phone: customer.phone,
+                    password: customer.password,
+                    image_url: customer.image_url,
+                    birthdate: customer.birthdate,
+                    adress: customer.adress,
                 }
             },
             { new: true }

@@ -17,6 +17,7 @@ import { AnimalTypeValidator } from "../../database/validators/animal-type.valid
 import { AnimalTypeInput } from "../../database/inputs/animal_type.input";
 import { AnimalValidator } from "../../database/validators/animal.validator";
 import { VetService } from "../vet/vet.service";
+import { CustomerUpdateInput } from "src/database/inputs/customer-update.input";
 
 @Resolver()
 export class ManagerResolver {
@@ -209,5 +210,12 @@ export class ManagerResolver {
         return await this.managerService.getAllCustomers();
     }
 
-
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => UserValidator)
+    async updateCustomerProfile(
+        @Args('id') id: string,
+        @Args('customer') customer: CustomerUpdateInput,
+    ): Promise<UserValidator> {
+        return await this.managerService.updateCustomerProfileById(id, customer);
+    }
 }
