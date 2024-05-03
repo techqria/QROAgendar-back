@@ -218,4 +218,13 @@ export class ManagerResolver {
     ): Promise<UserValidator> {
         return await this.managerService.updateCustomerProfileById(id, customer);
     }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => UserValidator)
+    async updateAnimalByIndex(
+        @Args('index') index: number,
+        @Args('animal') animal: AnimalInput,
+    ): Promise<UserValidator> {
+        return await this.managerService.updateAnimalByIndex(index, animal);
+    }
 }

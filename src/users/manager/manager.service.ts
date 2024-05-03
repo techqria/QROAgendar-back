@@ -253,4 +253,24 @@ export class ManagerService {
             specialty_id
         })).length
     }
+
+    async updateAnimalByIndex(index: number, animal: AnimalInput): Promise<UserValidator> {
+        console.log(index, animal)
+        return await this.userModel.findByIdAndUpdate(animal.userId,
+            {
+                $set: {
+                  [`animals.${index}.avatar`]: animal.avatar, 
+                  [`animals.${index}.breed`]: animal.breed, 
+                  [`animals.${index}.color`]: animal.color, 
+                  [`animals.${index}.gender`]: animal.gender, 
+                  [`animals.${index}.name`]: animal.name, 
+                  [`animals.${index}.neutered`]: animal.neutered, 
+                  [`animals.${index}.typeAnimalId`]: animal.typeAnimalId, 
+                },
+            },
+            {
+              new: true, 
+            }
+        )
+    }
 }
