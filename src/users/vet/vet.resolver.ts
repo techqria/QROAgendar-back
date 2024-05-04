@@ -7,6 +7,7 @@ import { ScheduleDetailValidator } from "src/database/validators/schedule-detail
 import { AnimalValidator } from "src/database/validators/animal.validator";
 import { UserService } from "../user.service";
 import { AnimalTypeValidator } from "src/database/validators/animal-type.validator";
+import { SpecialtyValidator } from "src/database/validators/specialty.validator";
 
 @Resolver(of => ScheduleValidator)
 export class VetResolver {
@@ -85,5 +86,13 @@ export class VetResolver {
         @Args('id') id: string,
     ): Promise<AnimalTypeValidator> {
         return await this.vetService.getAnimalTypeById(id)
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Query(() => SpecialtyValidator)
+    async getSpecialtyById(
+        @Args('id') id: string,
+    ): Promise<SpecialtyValidator> {
+        return await this.vetService.getSpecialtyById(id)
     }
 }

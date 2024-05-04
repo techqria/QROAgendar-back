@@ -236,4 +236,14 @@ export class ManagerResolver {
     ): Promise<UserValidator> {
         return await this.managerService.removeAnimalByIndex(index, userId);
     }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => ScheduleValidator)
+    async updateSchedule(
+        @Args('id') id: string,
+        @Args('schedule') schedule: ScheduleInput,
+    ): Promise<ScheduleValidator> {
+        console.log(schedule)
+        return await this.managerService.updateScheduleById(id, schedule);
+    }
 }

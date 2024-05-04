@@ -283,4 +283,27 @@ export class ManagerService {
             { new: true } // Return the updated document (optional)
         );
     }
+
+    async updateScheduleById(id: string, schedule: ScheduleInput): Promise<ScheduleValidator> {
+        return await this.scheduleModel.findByIdAndUpdate(id,
+            {
+                $set: {
+                    specialty_id: schedule.specialty_id,
+                    employee_id: schedule.employee_id,
+                    date: schedule.date,
+                    customer_name: schedule.customer_name,
+                    customer_phone: schedule.customer_phone,
+                    pet_breed: schedule.pet_breed,
+                    pet_name: schedule.pet_name,
+                    pet_type: schedule.pet_type,
+                    text: schedule.text,
+                    payment: {
+                        price: schedule.payment.price,
+                        method: schedule.payment.method,
+                    },
+                }
+            },
+            { new: true }
+        )
+    }
 }
