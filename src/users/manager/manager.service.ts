@@ -306,4 +306,9 @@ export class ManagerService {
             { new: true }
         )
     }
+
+    async removeScheduleById(id: string): Promise<ScheduleValidator> {
+        return await this.scheduleModel.findByIdAndDelete(id)
+    }
+
 }

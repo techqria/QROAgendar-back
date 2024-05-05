@@ -243,7 +243,14 @@ export class ManagerResolver {
         @Args('id') id: string,
         @Args('schedule') schedule: ScheduleInput,
     ): Promise<ScheduleValidator> {
-        console.log(schedule)
         return await this.managerService.updateScheduleById(id, schedule);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => ScheduleValidator)
+    async removeSchedule(
+        @Args('id') id: string,
+    ): Promise<ScheduleValidator> {
+        return await this.managerService.removeScheduleById(id);
     }
 }
