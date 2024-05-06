@@ -9,11 +9,14 @@ import { ManagerService } from "../manager/manager.service";
 import { FinanceListByUserValidator } from "../../database/validators/finance-list-by-user.validator";
 import { getAnnualRevenue } from "../../functions/get-annual-revenue";
 import { getPaymentMethodsPercentage } from "../../functions/get-payment-methods-percentage";
-import { getWeekScheduleHours } from "../../functions/get-week-schedule-hours";
+import { getDateRangeScheduleHours } from "../../functions/get-date-range-schedule-hours";
 import { DashboardValidator } from "../../database/validators/dashboard.validator";
 import { VetService } from "../vet/vet.service";
 import { DashboardFinanceValidator } from "src/database/validators/dashboard-finance.validator";
 import { getPaymentMethodsValue } from "src/functions/get-payment-methods-value";
+import { DashboardTimeValidator } from "src/database/validators/dashboard-time.validator";
+import { DashboardSpecialtiesValidator } from "src/database/validators/dashboard-specialties.validator";
+import { getSpecialities } from "src/functions/get-specialties";
 
 @Resolver()
 export class AdminResolver {
@@ -95,13 +98,41 @@ export class AdminResolver {
 
         const paymentMethodsPercentage = getPaymentMethodsPercentage(schedules)
         const annualRevenue = getAnnualRevenue(schedules)
-        const weekScheduleHours = getWeekScheduleHours(schedules)
+        const weekScheduleHours = getDateRangeScheduleHours(schedules)
 
         return {
             paymentMethodsPercentage,
             annualRevenue,
             weekScheduleHours,
         };
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Query(() => DashboardTimeValidator)
+    async getDashboardTime(
+        @Args('startDate') startDate: Date,
+        @Args('finalDate') finalDate: Date
+    ): Promise<DashboardTimeValidator> {
+        const schedules = await this.managerService.getSchedulesByDateRange(startDate,finalDate)
+
+        const dateRangeScheduleHours = getDateRangeScheduleHours(schedules)
+
+        return {
+            dateRangeScheduleHours,
+        };
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Query(() => [DashboardSpecialtiesValidator])
+    async getDashboardSpecialties(
+        @Args('startDate') startDate: Date,
+        @Args('finalDate') finalDate: Date
+    ): Promise<DashboardSpecialtiesValidator[]> {
+        const schedules = await this.managerService.getSchedulesByDateRange(startDate,finalDate)
+
+        const specialties = getSpecialities(schedules)
+
+        return specialties
     }
 
     @UseGuards(GqlAuthGuard)
