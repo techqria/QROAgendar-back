@@ -1,11 +1,11 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { ScheduleValidator } from "../../database/validators/schedule.validator";
-import { AnimalValidator } from "src/database/validators/animal.validator";
-import { UserValidator } from "src/database/validators/user.validor";
-import { roleEnum } from "src/database/dto/role.enum";
-import { AnimalTypeValidator } from "src/database/validators/animal-type.validator";
-import { SpecialtyValidator } from "src/database/validators/specialty.validator";
+import { AnimalValidator } from "../../database/validators/animal.validator";
+import { UserValidator } from "../../database/validators/user.validor";
+import { roleEnum } from "../../database/dto/role.enum";
+import { AnimalTypeValidator } from "../../database/validators/animal-type.validator";
+import { SpecialtyValidator } from "../../database/validators/specialty.validator";
 
 @Injectable()
 export class VetService {

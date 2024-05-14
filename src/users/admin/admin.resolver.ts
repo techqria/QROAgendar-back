@@ -12,11 +12,11 @@ import { getPaymentMethodsPercentage } from "../../functions/get-payment-methods
 import { getDateRangeScheduleHours } from "../../functions/get-date-range-schedule-hours";
 import { DashboardValidator } from "../../database/validators/dashboard.validator";
 import { VetService } from "../vet/vet.service";
-import { DashboardFinanceValidator } from "src/database/validators/dashboard-finance.validator";
-import { getPaymentMethodsValue } from "src/functions/get-payment-methods-value";
-import { DashboardTimeValidator } from "src/database/validators/dashboard-time.validator";
-import { DashboardSpecialtiesValidator } from "src/database/validators/dashboard-specialties.validator";
-import { getSpecialities } from "src/functions/get-specialties";
+import { DashboardFinanceValidator } from "../../database/validators/dashboard-finance.validator";
+import { getPaymentMethodsValue } from "../../functions/get-payment-methods-value";
+import { DashboardTimeValidator } from "../../database/validators/dashboard-time.validator";
+import { DashboardSpecialtiesValidator } from "../../database/validators/dashboard-specialties.validator";
+import { getSpecialities } from "../../functions/get-specialties";
 
 @Resolver()
 export class AdminResolver {

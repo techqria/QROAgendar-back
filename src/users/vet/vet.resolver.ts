@@ -3,11 +3,11 @@ import { Args, Query, Resolver } from '@nestjs/graphql';
 import { VetService } from './vet.service';
 import { ScheduleValidator } from "../../database/validators/schedule.validator";
 import { GqlAuthGuard } from "../../guards/auth.guard";
-import { ScheduleDetailValidator } from "src/database/validators/schedule-detail.validator";
-import { AnimalValidator } from "src/database/validators/animal.validator";
+import { ScheduleDetailValidator } from "../../database/validators/schedule-detail.validator";
+import { AnimalValidator } from "../../database/validators/animal.validator";
 import { UserService } from "../user.service";
-import { AnimalTypeValidator } from "src/database/validators/animal-type.validator";
-import { SpecialtyValidator } from "src/database/validators/specialty.validator";
+import { AnimalTypeValidator } from "../../database/validators/animal-type.validator";
+import { SpecialtyValidator } from "../../database/validators/specialty.validator";
 
 @Resolver(of => ScheduleValidator)
 export class VetResolver {

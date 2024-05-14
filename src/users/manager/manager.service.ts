@@ -13,7 +13,7 @@ import { AnimalTypeValidator } from "../../database/validators/animal-type.valid
 import { AnimalTypeInput } from "../../database/inputs/animal_type.input";
 import { AnimalInput } from "../../database/inputs/animal.input";
 import { AnimalValidator } from "../../database/validators/animal.validator";
-import { CustomerUpdateInput } from "src/database/inputs/customer-update.input";
+import { CustomerUpdateInput } from "../../database/inputs/customer-update.input";
 
 @Injectable()
 export class ManagerService {

@@ -3,7 +3,7 @@ import { Args, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { UserValidator } from "../database/validators/user.validor";
 import { GqlAuthGuard } from "../guards/auth.guard";
-import { ChangePasswordValidator } from "src/database/validators/change-password.validator";
+import { ChangePasswordValidator } from "../database/validators/change-password.validator";
 
 @Resolver(of => UserValidator)
 export class UserResolver {
