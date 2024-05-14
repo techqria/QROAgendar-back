@@ -231,6 +231,10 @@ export class ManagerService {
         return await this.specialtyModel.findByIdAndDelete(id)
     }
 
+    async getSpecialtyById(id: string): Promise<SpecialtyValidator> {
+        return await this.specialtyModel.findById(id)
+    }
+
     async createSpecialty(specialty: SpecialtyInput): Promise<SpecialtyValidator> {
         const newSpecialty = await this.specialtyModel.create(specialty)
         newSpecialty.save();

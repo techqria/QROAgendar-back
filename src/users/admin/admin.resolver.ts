@@ -16,7 +16,6 @@ import { DashboardFinanceValidator } from "../../database/validators/dashboard-f
 import { getPaymentMethodsValue } from "../../functions/get-payment-methods-value";
 import { DashboardTimeValidator } from "../../database/validators/dashboard-time.validator";
 import { DashboardSpecialtiesValidator } from "../../database/validators/dashboard-specialties.validator";
-import { getSpecialities } from "../../functions/get-specialties";
 
 @Resolver()
 export class AdminResolver {
@@ -113,7 +112,7 @@ export class AdminResolver {
         @Args('startDate') startDate: Date,
         @Args('finalDate') finalDate: Date
     ): Promise<DashboardTimeValidator> {
-        const schedules = await this.managerService.getSchedulesByDateRange(startDate,finalDate)
+        const schedules = await this.managerService.getSchedulesByDateRange(startDate, finalDate)
 
         const dateRangeScheduleHours = getDateRangeScheduleHours(schedules)
 
@@ -122,18 +121,18 @@ export class AdminResolver {
         };
     }
 
-    @UseGuards(GqlAuthGuard)
-    @Query(() => [DashboardSpecialtiesValidator])
-    async getDashboardSpecialties(
-        @Args('startDate') startDate: Date,
-        @Args('finalDate') finalDate: Date
-    ): Promise<DashboardSpecialtiesValidator[]> {
-        const schedules = await this.managerService.getSchedulesByDateRange(startDate,finalDate)
+    // @UseGuards(GqlAuthGuard)
+    // @Query(() => [DashboardSpecialtiesValidator])
+    // async getDashboardSpecialties(
+    //     @Args('startDate') startDate: Date,
+    //     @Args('finalDate') finalDate: Date
+    // ): Promise<DashboardSpecialtiesValidator[]> {
+    //     const schedules = await this.managerService.getSchedulesByDateRange(startDate, finalDate)
 
-        const specialties = getSpecialities(schedules)
+    //     const specialties = await Promise.all(schedules.map(async el => await this.managerService.getSpecialtyById(el.specialty_id)))
 
-        return specialties
-    }
+    //     return specialties
+    // }
 
     @UseGuards(GqlAuthGuard)
     @Query(() => DashboardFinanceValidator)
