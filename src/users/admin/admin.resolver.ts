@@ -121,18 +121,51 @@ export class AdminResolver {
         };
     }
 
-    // @UseGuards(GqlAuthGuard)
-    // @Query(() => [DashboardSpecialtiesValidator])
-    // async getDashboardSpecialties(
-    //     @Args('startDate') startDate: Date,
-    //     @Args('finalDate') finalDate: Date
-    // ): Promise<DashboardSpecialtiesValidator[]> {
-    //     const schedules = await this.managerService.getSchedulesByDateRange(startDate, finalDate)
+    @UseGuards(GqlAuthGuard)
+    @Query(() => DashboardSpecialtiesValidator)
+    async getDashboardSpecialties(
+        @Args('startDate') startDate: Date,
+        @Args('finalDate') finalDate: Date
+    ): Promise<DashboardSpecialtiesValidator> {
+        const schedules = await this.managerService.getSchedulesByDateRange(startDate, finalDate)
 
-    //     const specialties = await Promise.all(schedules.map(async el => await this.managerService.getSpecialtyById(el.specialty_id)))
+        const specialtiesArr = await Promise.all(
+            schedules.map(async schedule => (
+                {
+                    specialty: (await this.managerService.getSpecialtyById(schedule.specialty_id)).title,
+                    price: schedule.payment.price,
+                }
+            ))
+        )
 
-    //     return specialties
-    // }
+        const generateRandomColor = () => {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+              color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        const result = specialtiesArr.reduce((acc: any[], curr: any) => {
+            if (acc.find(el => el.specialty == curr.specialty)) {
+                const index = acc.findIndex(el => el.specialty == curr.specialty)
+                acc[index].total_price += curr.price
+                acc[index].qtt_consultations += 1
+            } else {
+                acc.push({
+                    specialty: curr.specialty,
+                    color: generateRandomColor(),
+                    total_price: curr.price,
+                    qtt_consultations: 1,
+                })
+            }
+
+            return acc
+        }, [])
+
+        return { specialties: result }
+    }
 
     @UseGuards(GqlAuthGuard)
     @Query(() => DashboardFinanceValidator)

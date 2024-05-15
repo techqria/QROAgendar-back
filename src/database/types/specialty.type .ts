@@ -3,8 +3,14 @@ import { Field, ObjectType } from "@nestjs/graphql";
 @ObjectType()
 export class SpecialtyType {
     @Field()
-    price: number
+    specialty: string
 
     @Field()
-    date: Date
+    color: string
+
+    @Field()
+    total_price: number
+
+    @Field()
+    qtt_consultations: number
 }

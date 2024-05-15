@@ -4,7 +4,7 @@ import { SpecialtyType } from "../types/specialty.type ";
 
 @ObjectType()
 export class DashboardSpecialtiesValidator {
-    @Field()
+    @Field(type => [SpecialtyType])
     @IsNotEmpty()
-    specialities: SpecialtyType[]
+    specialties: SpecialtyType[]
 }
