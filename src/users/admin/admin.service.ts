@@ -31,4 +31,14 @@ export class AdminService {
     async getScheduleByVetId(vetId: string): Promise<ScheduleValidator[]> {
         return await this.scheduleModel.find({ employee_id: vetId }).sort({ date: -1 });
     }
+
+    async getSchedulesByVetIdAndByDateRange(vetId:string, startDate: Date, finalDate: Date): Promise<ScheduleValidator[]> {
+        return await this.scheduleModel.find({
+            employee_id: vetId,
+            date: {
+                $gte: new Date(startDate).getTime(),
+                $lte: new Date(finalDate).getTime()
+            }
+        });
+    }
 }

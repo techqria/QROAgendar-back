@@ -49,12 +49,15 @@ export class AdminResolver {
 
     @UseGuards(GqlAuthGuard)
     @Query(() => [FinanceListValidator])
-    async getFinanceList(): Promise<FinanceListValidator[]> {
+    async getFinanceList(
+        @Args('startDate') startDate: Date,
+        @Args('finalDate') finalDate: Date
+    ): Promise<FinanceListValidator[]> {
 
         const vets = await this.managerService.getAllVets()
         const vetsData: { id: string, name: string }[] = vets.map(vet => ({ id: vet.id, name: vet.name }))
 
-        const schedules = await this.managerService.getAllSchedules()
+        const schedules = await this.managerService.getSchedulesByDateRange(startDate, finalDate)
 
         const financeList: FinanceListValidator[] = vetsData.map(vet => {
             const schedulesFiltered = schedules.filter(el => el.employee_id == vet.id)
@@ -70,9 +73,13 @@ export class AdminResolver {
 
     @UseGuards(GqlAuthGuard)
     @Query(() => [FinanceListByUserValidator])
-    async getFinanceListByUser(@Args('id') id: string): Promise<FinanceListByUserValidator[]> {
+    async getFinanceListByUser(
+        @Args('id') id: string,
+        @Args('startDate') startDate: Date,
+        @Args('finalDate') finalDate: Date
+    ): Promise<FinanceListByUserValidator[]> {
 
-        const schedules = await this.adminService.getScheduleByVetId(id)
+        const schedules = await this.adminService.getSchedulesByVetIdAndByDateRange(id, startDate, finalDate)
 
         const financeList: FinanceListByUserValidator[] = await Promise.all(schedules.map(
             async ({ customer_name, date, payment, pet_breed, pet_name, pet_type }) => (
@@ -142,7 +149,7 @@ export class AdminResolver {
             var letters = '0123456789ABCDEF';
             var color = '#';
             for (var i = 0; i < 6; i++) {
-              color += letters[Math.floor(Math.random() * 16)];
+                color += letters[Math.floor(Math.random() * 16)];
             }
             return color;
         }
