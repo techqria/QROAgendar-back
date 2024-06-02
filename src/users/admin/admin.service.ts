@@ -1,44 +1,32 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { Injectable } from '@nestjs/common';
 import { ManagerInput } from '../../database/inputs/manager.input';
 import { UserValidator } from "../../database/validators/user.validor";
 import { ScheduleValidator } from "../../database/validators/schedule.validator";
+import firestoreService from "src/firebase/firestore.service";
+import { CollectionEnum, KeyEnum } from "src/enum";
 
 @Injectable()
 export class AdminService {
-    constructor(
-        @Inject('USER_MODEL')
-        private userModel: Model<UserValidator>,
-
-        @Inject('SCHEDULE_MODEL')
-        private scheduleModel: Model<ScheduleValidator>
-    ) { }
-
     async getAllUsers(): Promise<UserValidator[]> {
-        return await this.userModel.find();
+        return await firestoreService.getAll(CollectionEnum.users)
     }
 
     async deleteUser(id: string): Promise<UserValidator> {
-        return await this.userModel.findByIdAndDelete(id);
+        return await firestoreService.deleteById(CollectionEnum.users, id);
     }
 
     async createManager(manager: ManagerInput): Promise<any> {
-        const newManager = await this.userModel.create(manager)
-        newManager.save();
-        return newManager;
+        return await firestoreService.create(CollectionEnum.users, manager);
     }
 
     async getScheduleByVetId(vetId: string): Promise<ScheduleValidator[]> {
-        return await this.scheduleModel.find({ employee_id: vetId }).sort({ date: -1 });
+        return await firestoreService.getWhere(CollectionEnum.schedule,
+            { key: KeyEnum.employee_id, operator: '==', value: vetId },
+            { key: KeyEnum.date, direction: 'desc' }
+        );
     }
 
-    async getSchedulesByVetIdAndByDateRange(vetId:string, startDate: Date, finalDate: Date): Promise<ScheduleValidator[]> {
-        return await this.scheduleModel.find({
-            employee_id: vetId,
-            date: {
-                $gte: new Date(startDate).getTime(),
-                $lte: new Date(finalDate).getTime()
-            }
-        });
+    async getSchedulesByVetIdAndByDateRange(vetId: string, startDate: Date, finalDate: Date): Promise<ScheduleValidator[]> {
+        return await firestoreService.getSchedulesByVetIdAndByDateRange(CollectionEnum.schedule, vetId, startDate, finalDate)
     }
 }

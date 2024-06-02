@@ -14,305 +14,198 @@ import { AnimalTypeInput } from "../../database/inputs/animal_type.input";
 import { AnimalInput } from "../../database/inputs/animal.input";
 import { AnimalValidator } from "../../database/validators/animal.validator";
 import { CustomerUpdateInput } from "../../database/inputs/customer-update.input";
+import firestoreService from "src/firebase/firestore.service";
+import { CollectionEnum, KeyEnum } from "src/enum";
 
 @Injectable()
 export class ManagerService {
-    constructor(
-        @Inject('USER_MODEL')
-        private userModel: Model<UserValidator>,
-
-        @Inject('SPECIALTY_MODEL')
-        private specialtyModel: Model<SpecialtyValidator>,
-
-        @Inject('SCHEDULE_MODEL')
-        private scheduleModel: Model<ScheduleValidator>,
-
-        @Inject('ANIMAL_TYPE_MODEL')
-        private animalTypeModel: Model<AnimalTypeValidator>,
-    ) { }
-
     async getAllSpecialties(): Promise<SpecialtyValidator[]> {
-        return await this.specialtyModel.find();
+        return await firestoreService.getAll(CollectionEnum.specialty)
     }
     async getAllVets(): Promise<UserValidator[]> {
-        return await this.userModel.find({ role: "employee" });
+        return await firestoreService.getAll(CollectionEnum.users, { key: KeyEnum.role, operator: '==', value: "employee" })
     }
     async getAllSchedules(): Promise<ScheduleValidator[]> {
-        return await this.scheduleModel.find();
+        return await firestoreService.getAll(CollectionEnum.schedule)
     }
 
     async getSchedulesByDateRange(startDate: Date, finalDate: Date): Promise<ScheduleValidator[]> {
-        return await this.scheduleModel.find({
-            date: {
-                $gte: new Date(startDate).getTime(),
-                $lte: new Date(finalDate).getTime()
-            }
-        });
+        return await firestoreService.getSchedulesByDateRange(CollectionEnum.schedule, startDate, finalDate);
     }
 
     async createVet(vet: VetInput): Promise<UserValidator> {
-        const newVet = await this.userModel.create(vet)
-        newVet.save();
+        const newVet = await firestoreService.create(CollectionEnum.users, vet)
 
         // atualizar quantidade de funcionários
-        await this.increaseSpecialtyQttEmployees(newVet.specialty_id)
+        await firestoreService.increaseSpecialtyQttEmployees(CollectionEnum.specialty, newVet.specialty_id)
 
-        return newVet;
-    }
-
-    private async increaseSpecialtyQttEmployees(specialty_id: string) {
-        await this.specialtyModel.findByIdAndUpdate(specialty_id, {
-            $inc: {
-                qtt_employees: 1
-            }
-        })
-    }
-
-    private async decreaseSpecialtyQttEmployees(specialty_id: string) {
-        await this.specialtyModel.findByIdAndUpdate(specialty_id, {
-            $inc: {
-                qtt_employees: -1
-            }
-        })
+        return newVet
     }
 
     async createCustomer(customer: CustomerInput): Promise<UserValidator> {
-        const newCustomer = await this.userModel.create(customer)
-        newCustomer.save();
-        return newCustomer;
+        return await firestoreService.create(CollectionEnum.users, customer)
     }
 
     async getAllCustomers(): Promise<UserValidator[]> {
-        return await this.userModel.find({ role: roleEnum.customer })
+        return await firestoreService.getAll(CollectionEnum.users, { key: KeyEnum.role, operator: "==", value: roleEnum.customer })
     }
 
     async getCustomerById(id: string): Promise<UserValidator> {
-        return await this.userModel.findById(id)
+        return await firestoreService.getById(CollectionEnum.users, id)
     }
 
     async removeCustomer(id: string): Promise<UserValidator> {
-        return await this.userModel.findByIdAndDelete(id)
+        return await firestoreService.deleteById(CollectionEnum.users, id)
     }
 
     async updateCustomerById(newCustomer: CustomerInput): Promise<UserValidator> {
-        return await this.userModel.findByIdAndUpdate(newCustomer.id,
-            {
-                $set: {
-                    name: newCustomer.name,
-                    email: newCustomer.email,
-                    phone: newCustomer.phone,
-                    birthdate: newCustomer.birthdate,
-                    animals: newCustomer.animals,
-                    adress: newCustomer.adress
-                }
-            },
-            { new: true }
-        )
+        return await firestoreService.findByIdAndUpdate(CollectionEnum.users, newCustomer.id, {
+            name: newCustomer.name,
+            email: newCustomer.email,
+            phone: newCustomer.phone,
+            birthdate: newCustomer.birthdate,
+            animals: newCustomer.animals,
+            adress: newCustomer.adress
+        })
     }
 
     async createAnimalType(animalType: AnimalTypeInput): Promise<AnimalTypeValidator> {
-        const newAnimalType = await this.animalTypeModel.create(animalType)
-        newAnimalType.save();
-        return newAnimalType;
+        return await firestoreService.create(CollectionEnum.animal_type, animalType)
     }
 
     async getAllAnimalTypes(): Promise<AnimalTypeValidator[]> {
-        return await this.animalTypeModel.find()
+        return await firestoreService.getAll(CollectionEnum.animal_type)
     }
 
-
     async removeAnimalType(id: string): Promise<AnimalTypeValidator> {
-        return await this.animalTypeModel.findByIdAndDelete(id)
+        return await firestoreService.deleteById(CollectionEnum.animal_type, id)
     }
 
     async updateAnimalTypeById(newAnimalType: AnimalTypeInput): Promise<AnimalTypeValidator> {
-        return await this.animalTypeModel.findByIdAndUpdate(newAnimalType.id,
-            {
-                $set: {
-                    name: newAnimalType.name,
-                }
-            },
-            { new: true }
-        )
+        return await firestoreService.findByIdAndUpdate(CollectionEnum.animal_type, newAnimalType.id, { name: newAnimalType.name })
     }
 
     async createAnimal(animal: AnimalInput): Promise<UserValidator> {
-        return await this.userModel.findByIdAndUpdate(animal.userId, {
-            $push: {
-                animals: {
-                    name: animal.name,
-                    gender: animal.gender,
-                    breed: animal.breed,
-                    color: animal.color,
-                    typeAnimalId: animal.typeAnimalId,
-                    neutered: animal.neutered,
-                    avatar: animal.avatar,
-                }
-            }
-        })
+        return await firestoreService.createAnimal(CollectionEnum.users, animal.userId, animal)
     }
 
     async getAllAnimals(): Promise<AnimalValidator[][]> {
-        return (await this.userModel.find()).map(el => el.animals)
+        return (await firestoreService.getAll(CollectionEnum.users)).map(el => el.animals)
     }
 
     async getAnimalById(userId: string, animalIndex: number): Promise<AnimalValidator> {
-        return (await this.userModel.findById(userId)).animals[animalIndex]
+        return (await firestoreService.getById(CollectionEnum.users, userId)).animals[animalIndex]
     }
 
     async removeAnimal(userId: string, animalIndex: number): Promise<UserValidator> {
-        const user = await this.userModel.findById(userId,);
+        const user = await firestoreService.getById(CollectionEnum.users, userId)
+
         const userUpdated = user
         userUpdated.animals.splice(animalIndex, 1)
 
-        return this.userModel.findByIdAndUpdate(userId, {
-            $set: {
-                animals: userUpdated.animals
-            }
-        })
+        return await firestoreService.findByIdAndUpdate(CollectionEnum.users, userId, { animals: userUpdated.animals })
     }
 
     async updateAnimalById(userId: string, newAnimal: AnimalInput, animalIndex: number): Promise<UserValidator> {
-        const user = await this.userModel.findById(userId,);
+        const user = await firestoreService.getById(CollectionEnum.users, userId)
+
         const userUpdated = user
         userUpdated.animals[animalIndex] = newAnimal
 
-        return this.userModel.findByIdAndUpdate(userId, {
-            $set: {
-                animals: userUpdated.animals
-            }
-        })
+        return await firestoreService.findByIdAndUpdate(CollectionEnum.users, userId, { animals: userUpdated.animals })
     }
 
     async getVetById(id: string): Promise<UserValidator> {
-        return await this.userModel.findById(id)
+        return await firestoreService.getById(CollectionEnum.users, id)
     }
 
 
     async updateVetById(newData: VetUpdateInput): Promise<UserValidator> {
-        return await this.userModel.findByIdAndUpdate(newData.id,
-            {
-                $set: {
-                    name: newData.name,
-                    color: newData.color,
-                    email: newData.email,
-                    phone: newData.phone,
-                    specialty_id: newData.specialty_id
-                }
-            },
-            { new: true }
-        )
+        return await firestoreService.findByIdAndUpdate(CollectionEnum.users, newData.id, {
+            name: newData.name,
+            color: newData.color,
+            email: newData.email,
+            phone: newData.phone,
+            specialty_id: newData.specialty_id
+        })
     }
 
     async updateCustomerProfileById(id: string, customer: CustomerUpdateInput): Promise<UserValidator> {
-        return await this.userModel.findByIdAndUpdate(id,
-            {
-                $set: {
-                    name: customer.name,
-                    email: customer.email,
-                    phone: customer.phone,
-                    password: customer.password,
-                    image_url: customer.image_url,
-                    birthdate: customer.birthdate,
-                    adress: customer.adress,
-                }
-            },
-            { new: true }
-        )
+        return await firestoreService.findByIdAndUpdate(CollectionEnum.users, id, {
+            name: customer.name,
+            email: customer.email,
+            phone: customer.phone,
+            password: customer.password,
+            image_url: customer.image_url,
+            birthdate: customer.birthdate,
+            adress: customer.adress,
+        })
     }
 
     async removeVetById(id: string): Promise<UserValidator> {
-        const vetRemoved = await this.userModel.findByIdAndDelete(id)
-        await this.decreaseSpecialtyQttEmployees(vetRemoved.specialty_id)
+        const vetRemoved = await firestoreService.deleteById(CollectionEnum.users, id)
+
+        await firestoreService.decreaseSpecialtyQttEmployees(CollectionEnum.specialty, vetRemoved.specialty_id)
+
         return vetRemoved
     }
 
     async removeSpecialtyById(id: string): Promise<SpecialtyValidator> {
-        return await this.specialtyModel.findByIdAndDelete(id)
+        return await firestoreService.deleteById(CollectionEnum.specialty, id)
     }
 
     async getSpecialtyById(id: string): Promise<SpecialtyValidator> {
-        return await this.specialtyModel.findById(id)
+        return await firestoreService.getById(CollectionEnum.specialty, id)
     }
 
     async createSpecialty(specialty: SpecialtyInput): Promise<SpecialtyValidator> {
-        const newSpecialty = await this.specialtyModel.create(specialty)
-        newSpecialty.save();
-        return newSpecialty;
+        return await firestoreService.create(CollectionEnum.specialty, specialty)
     }
 
     async createSchedule(schedule: ScheduleInput): Promise<ScheduleValidator> {
-        const newSchedule = await this.scheduleModel.create(schedule)
-        newSchedule.save();
-        return newSchedule;
+        return await firestoreService.create(CollectionEnum.schedule, schedule)
     }
 
     async verifyScheduleHour(date: Date, employee_id: string, specialty_id: string): Promise<number> {
-        return (await this.scheduleModel.find({
-            date: {
-                $gte: new Date(date.getTime() - 30 * 60000), // 30 minutes before
-                $lte: new Date(date.getTime() + 30 * 60000), // 30 minutes after
-            },
-            employee_id,
-            specialty_id
-        })).length
+        return await firestoreService.verifyScheduleHour(CollectionEnum.schedule, date, employee_id, specialty_id)
     }
 
     async updateAnimalByIndex(index: number, animal: AnimalInput): Promise<UserValidator> {
-        return await this.userModel.findByIdAndUpdate(animal.userId,
-            {
-                $set: {
-                    [`animals.${index}.avatar`]: animal.avatar,
-                    [`animals.${index}.breed`]: animal.breed,
-                    [`animals.${index}.color`]: animal.color,
-                    [`animals.${index}.gender`]: animal.gender,
-                    [`animals.${index}.name`]: animal.name,
-                    [`animals.${index}.neutered`]: animal.neutered,
-                    [`animals.${index}.typeAnimalId`]: animal.typeAnimalId,
-                },
-            },
-            {
-                new: true,
-            }
-        )
+        return await firestoreService.findByIdAndUpdate(CollectionEnum.users, animal.userId, {
+            [`animals.${index}.avatar`]: animal.avatar,
+            [`animals.${index}.breed`]: animal.breed,
+            [`animals.${index}.color`]: animal.color,
+            [`animals.${index}.gender`]: animal.gender,
+            [`animals.${index}.name`]: animal.name,
+            [`animals.${index}.neutered`]: animal.neutered,
+            [`animals.${index}.typeAnimalId`]: animal.typeAnimalId,
+        })
     }
 
     async removeAnimalByIndex(index: number, userId: string): Promise<UserValidator> {
-        await this.userModel.findByIdAndUpdate(userId,
-            { $unset: { [`animals.${index}`]: "" } },
-        )
-
-        return await this.userModel.findByIdAndUpdate(userId,
-            { $pull: { animals: null } }, // Remove elements with value 'null'
-            { new: true } // Return the updated document (optional)
-        );
+        return await firestoreService.removeAnimalByIndex(CollectionEnum.users, index, userId);
     }
 
     async updateScheduleById(id: string, schedule: ScheduleInput): Promise<ScheduleValidator> {
-        return await this.scheduleModel.findByIdAndUpdate(id,
-            {
-                $set: {
-                    specialty_id: schedule.specialty_id,
-                    employee_id: schedule.employee_id,
-                    date: schedule.date,
-                    customer_name: schedule.customer_name,
-                    customer_phone: schedule.customer_phone,
-                    pet_breed: schedule.pet_breed,
-                    pet_name: schedule.pet_name,
-                    pet_type: schedule.pet_type,
-                    text: schedule.text,
-                    payment: {
-                        price: schedule.payment.price,
-                        method: schedule.payment.method,
-                    },
-                }
+        return await firestoreService.findByIdAndUpdate(CollectionEnum.schedule, id, {
+            specialty_id: schedule.specialty_id,
+            employee_id: schedule.employee_id,
+            date: schedule.date,
+            customer_name: schedule.customer_name,
+            customer_phone: schedule.customer_phone,
+            pet_breed: schedule.pet_breed,
+            pet_name: schedule.pet_name,
+            pet_type: schedule.pet_type,
+            text: schedule.text,
+            payment: {
+                price: schedule.payment.price,
+                method: schedule.payment.method,
             },
-            { new: true }
-        )
+        })
     }
 
     async removeScheduleById(id: string): Promise<ScheduleValidator> {
-        return await this.scheduleModel.findByIdAndDelete(id)
+        return await firestoreService.deleteById(CollectionEnum.schedule, id)
     }
 
 }

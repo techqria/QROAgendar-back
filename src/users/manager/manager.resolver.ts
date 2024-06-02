@@ -1,7 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ManagerService } from './manager.service';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from "../../guards/auth.guard";
 import { UserValidator } from "../../database/validators/user.validor";
 import { VetInput } from "../../database/inputs/vet.input";
 import { VetUpdateValidator } from "../../database/validators/vet-update.validator";
@@ -18,6 +17,7 @@ import { AnimalTypeInput } from "../../database/inputs/animal_type.input";
 import { AnimalValidator } from "../../database/validators/animal.validator";
 import { VetService } from "../vet/vet.service";
 import { CustomerUpdateInput } from "../../database/inputs/customer-update.input";
+import { GqlAuthGuard } from "src/guards/auth.guard";
 
 @Resolver()
 export class ManagerResolver {

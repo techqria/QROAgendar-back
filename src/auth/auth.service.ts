@@ -1,21 +1,21 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Model } from 'mongoose';
 import { AuthType } from './auth.type';
 import * as bcrypt from "bcrypt";
 import { TokenType } from "./token.type";
 import { UserValidator } from "../database/validators/user.validor";
+import { CollectionEnum, KeyEnum } from "src/enum";
+import firestoreService from "src/firebase/firestore.service";
 
 @Injectable()
 export class AuthService {
     constructor(
-        @Inject('USER_MODEL')
-        private userModel: Model<UserValidator>,
         private jwtService: JwtService
     ) { }
 
     async login(email: string, password: string): Promise<AuthType> {
-        const user = await this.userModel.findOne({ email });
+        const user: UserValidator = await firestoreService.getWhere(CollectionEnum.users, { key: KeyEnum.email, operator: '==', value: email })
+
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!user || !isMatch) throw new NotFoundException('User not found. Please, check your credentials');

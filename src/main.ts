@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
+
   await app.listen(process.env.NEXT_PUBLIC_PORT || 2002);
 }
 bootstrap();
