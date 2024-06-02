@@ -2,22 +2,18 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { UserValidator } from "../database/validators/user.validor";
 import * as bcrypt from "bcrypt"
+import firestoreService from "src/firebase/firestore.service";
+import { CollectionEnum, KeyEnum } from "src/enum";
 
 @Injectable()
 export class UserService {
-    constructor(
-        @Inject('USER_MODEL')
-        private userModel: Model<UserValidator>,
-    ) { }
-
     async getUserById(id: string): Promise<UserValidator> {
-        const user = await this.userModel.findById(id);
-        if (!user) throw new NotFoundException('Usuário não encontrado');
-        return user
+        return await firestoreService.getById(CollectionEnum.users, id)
     }
 
     async changePassword(email: string, newPassword: string, repeatNewPassword: string): Promise<UserValidator> {
-        const user = await this.userModel.findOne({ email });
+        const user = await firestoreService.getWhere(CollectionEnum.users, { key: KeyEnum.email, operator: '==', value: email })
+
         if (!user) throw new NotFoundException('Usuário não encontrado');
 
         if (!newPassword || !repeatNewPassword) throw new Error("Você deve preencher os campos");
@@ -28,10 +24,6 @@ export class UserService {
 
         const hashPassword = await bcrypt.hash(newPassword, await bcrypt.genSalt());
 
-        return await this.userModel.findByIdAndUpdate(user.id, {
-            $set: {
-                password: hashPassword
-            }
-        })
+        return await firestoreService.findByIdAndUpdate(CollectionEnum.users, user.id, { password: hashPassword })
     }
 }

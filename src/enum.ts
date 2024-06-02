@@ -14,5 +14,6 @@ export enum KeyEnum {
     phone = 'phone',
     role = 'role',
     employee_id = 'employee_id',
+    employee = 'employee',
     date = 'date'
 }

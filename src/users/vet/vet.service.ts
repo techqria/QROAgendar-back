@@ -6,46 +6,32 @@ import { UserValidator } from "../../database/validators/user.validor";
 import { roleEnum } from "../../database/dto/role.enum";
 import { AnimalTypeValidator } from "../../database/validators/animal-type.validator";
 import { SpecialtyValidator } from "../../database/validators/specialty.validator";
+import firestoreService from "src/firebase/firestore.service";
+import { CollectionEnum, KeyEnum } from "src/enum";
 
 @Injectable()
 export class VetService {
-    constructor(
-        @Inject('SCHEDULE_MODEL')
-        private scheduleModel: Model<ScheduleValidator>,
-
-        @Inject('USER_MODEL')
-        private userModel: Model<UserValidator>,
-
-        @Inject('ANIMAL_TYPE_MODEL')
-        private animalTypeModel: Model<AnimalTypeValidator>,
-
-        @Inject('SPECIALTY_MODEL')
-        private specialtyModel: Model<SpecialtyValidator>,
-    ) { }
-
     async getMySchedules(id: string): Promise<ScheduleValidator[]> {
-        const schedules = await this.scheduleModel.find({ employee: { id } });
-        if (!schedules) throw new NotFoundException('No appointment found.');
-        return schedules;
+        return await firestoreService.getAll(CollectionEnum.schedule, { key: KeyEnum.employee, operator: '==', value: id })
     }
 
     async getScheduleById(id: string): Promise<ScheduleValidator> {
-        return await this.scheduleModel.findById(id)
+        return await firestoreService.getById(CollectionEnum.schedule, id)
     }
 
     async getAnimalById(userId: string, animalIndex: number): Promise<AnimalValidator> {
-        return (await this.userModel.findById(userId)).animals[animalIndex]
+        return (await firestoreService.getById(CollectionEnum.users, userId)).animals[animalIndex]
     }
 
     async getUserByNameAndPhone(name: string, phone: string): Promise<UserValidator> {
-        return await this.userModel.findOne({ name, phone, role: roleEnum.customer })
+        return await firestoreService.getUserByNameAndPhone(CollectionEnum.users, name, phone, roleEnum.customer)
     }
 
     async getAnimalTypeById(id: string): Promise<AnimalTypeValidator> {
-        return await this.animalTypeModel.findById(id)
+        return await firestoreService.getById(CollectionEnum.animal_type, id)
     }
 
     async getSpecialtyById(id: string): Promise<SpecialtyValidator> {
-        return await this.specialtyModel.findById(id)
+        return await firestoreService.getById(CollectionEnum.specialty, id)
     }
 }

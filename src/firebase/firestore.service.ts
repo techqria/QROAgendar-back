@@ -3,6 +3,7 @@ import firebaseService from "./firebase.service";
 import { ISort, IWhereParams } from "src/interface";
 import { FieldValue } from "firebase-admin/firestore";
 import { AnimalInput } from "src/database/inputs/animal.input";
+import { UserValidator } from "src/database/validators/user.validor";
 
 class FirestoreService {
 
@@ -157,6 +158,19 @@ class FirestoreService {
         });
 
         return userRef.get().then(doc => doc.data());
+    }
+
+    async getUserByNameAndPhone(collection: CollectionEnum, name: string, phone: string, role: string): Promise<UserValidator> {
+        const dbRef = this.db.collection(collection);
+        const querySnapshot = await dbRef
+            .where('name', '==', name)
+            .where('phone', '==', phone)
+            .where('role', '==', role)
+            .limit(1)
+            .get();
+
+        if (querySnapshot.empty) return null;
+        return querySnapshot.docs[0].data() as UserValidator;
     }
 }
 
