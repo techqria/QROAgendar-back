@@ -38,7 +38,8 @@ class FirestoreService {
 
         if (querySnapshot.empty) return null;
 
-        return querySnapshot.docs[0].data()
+        const doc = querySnapshot.docs[0];
+        return { id: doc.id, ...doc.data() };
     }
 
     async deleteById(collection: CollectionEnum, id: string): Promise<any> {
