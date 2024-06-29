@@ -57,7 +57,7 @@ export class ManagerResolver {
     ): Promise<SpecialtyValidator> {
         const { qtt_employees } = await this.vetService.getSpecialtyById(id)
 
-        if (qtt_employees || !qtt_employees) throw new Error("Não é possível remover uma especialidade que possui funcionários cadastrados")
+        if (qtt_employees) throw new Error("Não é possível remover uma especialidade que possui funcionários cadastrados")
 
         return await this.managerService.removeSpecialtyById(id);
     }

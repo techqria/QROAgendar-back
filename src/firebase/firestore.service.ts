@@ -4,6 +4,7 @@ import { ISort, IWhereParams } from "src/interface";
 import { FieldValue } from "firebase-admin/firestore";
 import { AnimalInput } from "src/database/inputs/animal.input";
 import { UserValidator } from "src/database/validators/user.validor";
+import * as bcrypt from "bcrypt";
 
 class FirestoreService {
 
@@ -17,7 +18,9 @@ class FirestoreService {
 
         if (querySnapshot.empty) return [];
 
-        return querySnapshot.docs.map(el => el.data())
+        const docs = querySnapshot.docs.map(el => ({ id: el.id, ...el.data() }))
+
+        return docs
     }
 
     async getById(collection: CollectionEnum, id: string): Promise<any> {
@@ -52,15 +55,27 @@ class FirestoreService {
         await dbRef.doc(id).delete()
 
         //return document saved
-        return doc
+        return doc.data()
     }
 
     async create(collection: CollectionEnum, data: any): Promise<any> {
         const dbRef = this.db.collection(collection)
 
-        const querySnapshot = await dbRef.add(data)
+        data = collection == CollectionEnum.users
+            ? {...data, password: await this.encryptPassword(data.password)}
+            : data
 
-        return (await querySnapshot.get()).data()
+        const querySnapshot = await dbRef.add(data)
+        const doc = await querySnapshot.get()
+
+        return { id: doc.id, ...doc.data() }
+    }
+
+    private async encryptPassword(password:string){
+        const salt = await bcrypt.genSalt();
+        const hashPassword = await bcrypt.hash(password, salt);
+
+        return hashPassword
     }
 
     async getSchedulesByVetIdAndByDateRange(collection: CollectionEnum.schedule, vetId: string, startDate: Date, finalDate: Date): Promise<any> {
