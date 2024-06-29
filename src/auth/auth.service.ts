@@ -15,9 +15,7 @@ export class AuthService {
 
     async login(email: string, password: string): Promise<AuthType> {
         const user: UserValidator = await firestoreService.getWhere(CollectionEnum.users, { key: KeyEnum.email, operator: '==', value: email })
-        console.log('user',user)
         const isMatch = await bcrypt.compare(password, user.password);
-        console.log('isMatch',isMatch)
 
         if (!user || !isMatch) throw new NotFoundException('User not found. Please, check your credentials');
 

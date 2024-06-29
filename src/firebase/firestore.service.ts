@@ -21,7 +21,7 @@ class FirestoreService {
         if (querySnapshot.empty) return [];
 
         const docs = whereParams?.value == roleEnum.customer
-            ? querySnapshot.docs.map(el => ({ id: el.id, ...el.data(), birthdate: el.data().birthdate.toDate(),animals: Object.values(el.data().animals) }))
+            ? querySnapshot.docs.map(el => ({ id: el.id, ...el.data(), birthdate: el.data().birthdate.toDate(), animals: Object.values(el.data().animals) }))
             : querySnapshot.docs.map(el => ({ id: el.id, ...el.data() }))
 
         return docs
@@ -32,8 +32,7 @@ class FirestoreService {
 
         const doc = await dbRef.doc(id).get()
 
-        //return document saved
-        return doc
+        return doc.data()
     }
 
     async getWhere(collection: CollectionEnum, whereParams: IWhereParams, sort?: ISort): Promise<any> {
@@ -87,25 +86,26 @@ class FirestoreService {
 
         const querySnapshot = await dbRef
             .where('employee_id', '==', vetId)
-            .where('date', '>=', startDate)
-            .where('date', '<=', finalDate)
             .get()
 
         if (querySnapshot.empty) return []
 
-        return querySnapshot.docs.map(doc => doc.data());
+        const formatted = querySnapshot.docs.map(doc => ({ ...doc.data(), date: new Date(doc.data().date.toDate()),  }))
+        const filtered = formatted.filter(doc => doc.date >= startDate && doc.date <= finalDate)
+
+        return filtered
     }
 
     async getSchedulesByDateRange(collection: CollectionEnum, startDate: Date, finalDate: Date): Promise<any> {
         const dbRef = this.db.collection(collection);
         const querySnapshot = await dbRef
-            .where('date', '>=', startDate.getTime())
-            .where('date', '<=', finalDate.getTime())
+            .where('date', '>=', startDate)
+            .where('date', '<=', finalDate)
             .get();
 
         if (querySnapshot.empty) return [];
 
-        return querySnapshot.docs.map(doc => doc.data());
+        return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     }
 
     async increaseSpecialtyQttEmployees(collection: CollectionEnum, specialty_id: string): Promise<void> {
@@ -180,7 +180,7 @@ class FirestoreService {
         return userRef.get().then(doc => doc.data());
     }
 
-    async getUserByNameAndPhone(collection: CollectionEnum, name: string, phone: string, role: string): Promise<UserValidator> {
+    async getUserByNameAndPhone(collection: CollectionEnum, name: string, phone: string, role: roleEnum): Promise<UserValidator> {
         const dbRef = this.db.collection(collection);
         const querySnapshot = await dbRef
             .where('name', '==', name)
@@ -190,7 +190,8 @@ class FirestoreService {
             .get();
 
         if (querySnapshot.empty) return null;
-        return querySnapshot.docs[0].data() as UserValidator;
+        const doc = querySnapshot.docs[0]
+        return { id: doc.id, ...doc.data() } as UserValidator;
     }
 }
 

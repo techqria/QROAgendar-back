@@ -78,9 +78,7 @@ export class AdminResolver {
         @Args('startDate') startDate: Date,
         @Args('finalDate') finalDate: Date
     ): Promise<FinanceListByUserValidator[]> {
-
         const schedules = await this.adminService.getSchedulesByVetIdAndByDateRange(id, startDate, finalDate)
-
         const financeList: FinanceListByUserValidator[] = await Promise.all(schedules.map(
             async ({ customer_name, date, payment, pet_breed, pet_name, pet_type }) => (
                 {

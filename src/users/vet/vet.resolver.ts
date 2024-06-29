@@ -45,7 +45,7 @@ export class VetResolver {
 
         const { id: userId, animals } = await this.vetService.getUserByNameAndPhone(customer_name, customer_phone)
 
-        const petIndex = animals.findIndex(el => el.name == pet_name)
+        const petIndex = Object.values(animals).findIndex(el => el.name == pet_name)
 
         const { neutered: pet_neutered } = await this.vetService.getAnimalById(userId, petIndex)
 
@@ -58,7 +58,8 @@ export class VetResolver {
         return {
             customer_name,
             customer_phone,
-            date,
+            // @ts-ignore
+            date: date.toDate(),
             employee: employee_name,
             payment,
             pet_breed,
