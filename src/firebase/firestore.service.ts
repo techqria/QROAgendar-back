@@ -5,6 +5,7 @@ import { FieldValue } from "firebase-admin/firestore";
 import { AnimalInput } from "src/database/inputs/animal.input";
 import { UserValidator } from "src/database/validators/user.validor";
 import * as bcrypt from "bcrypt";
+import { roleEnum } from "src/database/dto/role.enum";
 
 class FirestoreService {
 
@@ -12,13 +13,16 @@ class FirestoreService {
 
     async getAll(collection: CollectionEnum, whereParams?: IWhereParams): Promise<any> {
         const dbRef = this.db.collection(collection)
+
         const querySnapshot = whereParams
             ? await dbRef.where(whereParams.key, whereParams.operator, whereParams.value).get()
             : await dbRef.get()
 
         if (querySnapshot.empty) return [];
 
-        const docs = querySnapshot.docs.map(el => ({ id: el.id, ...el.data() }))
+        const docs = whereParams?.value == roleEnum.customer
+            ? querySnapshot.docs.map(el => ({ id: el.id, ...el.data(), birthdate: el.data().birthdate.toDate(),animals: Object.values(el.data().animals) }))
+            : querySnapshot.docs.map(el => ({ id: el.id, ...el.data() }))
 
         return docs
     }
@@ -62,7 +66,7 @@ class FirestoreService {
         const dbRef = this.db.collection(collection)
 
         data = collection == CollectionEnum.users
-            ? {...data, password: await this.encryptPassword(data.password)}
+            ? { ...data, password: await this.encryptPassword(data.password) }
             : data
 
         const querySnapshot = await dbRef.add(data)
@@ -71,7 +75,7 @@ class FirestoreService {
         return { id: doc.id, ...doc.data() }
     }
 
-    private async encryptPassword(password:string){
+    private async encryptPassword(password: string) {
         const salt = await bcrypt.genSalt();
         const hashPassword = await bcrypt.hash(password, salt);
 
