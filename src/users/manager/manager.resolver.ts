@@ -57,7 +57,7 @@ export class ManagerResolver {
     ): Promise<SpecialtyValidator> {
         const { qtt_employees } = await this.vetService.getSpecialtyById(id)
 
-        if (qtt_employees || !qtt_employees) throw new Error("Não é possível remover uma especialidade que possui funcionários cadastrados")
+        if (qtt_employees) throw new Error("Não é possível remover uma especialidade que possui funcionários cadastrados")
 
         return await this.managerService.removeSpecialtyById(id);
     }
@@ -87,10 +87,9 @@ export class ManagerResolver {
     async createSchedule(
         @Args('schedule') schedule: ScheduleInput,
     ): Promise<ScheduleValidator> {
+        // const hasScheduleHour = await this.managerService.verifyScheduleHour(schedule.date, schedule.employee_id, schedule.specialty_id)
 
-        const hasScheduleHour = await this.managerService.verifyScheduleHour(schedule.date, schedule.employee_id, schedule.specialty_id)
-
-        if (hasScheduleHour) throw new Error("Este funcionário já possui um agendamento nesse horário")
+        // if (hasScheduleHour) throw new Error("Este funcionário já possui um agendamento nesse horário")
 
         return await this.managerService.createSchedule(schedule);
     }
@@ -119,7 +118,8 @@ export class ManagerResolver {
                 customer_phone: schedule.customer_phone,
                 employee_id: schedule.employee_id,
                 specialty_id: schedule.specialty_id,
-                date: schedule.date,
+                // @ts-ignore
+                date: schedule.date?.toDate(),
                 pet_breed: schedule.pet_breed,
                 payment: schedule.payment,
                 pet_type: schedule.pet_type,

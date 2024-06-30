@@ -19,8 +19,11 @@ export class VetService {
         return await firestoreService.getById(CollectionEnum.schedule, id)
     }
 
-    async getAnimalById(userId: string, animalIndex: number): Promise<AnimalValidator> {
-        return (await firestoreService.getById(CollectionEnum.users, userId)).animals[animalIndex]
+    async getAnimalById(userId: string, animalIndex: number): Promise<any> {
+        const user = await firestoreService.getById(CollectionEnum.users, userId)
+        const animals = Object.values(user.animals)
+
+        return animals[animalIndex]
     }
 
     async getUserByNameAndPhone(name: string, phone: string): Promise<UserValidator> {
